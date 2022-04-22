@@ -1,6 +1,8 @@
 # Node
 package-lock.json
 
+.env
+
 # Eleventy
 _site
 netlify/functions/onrequest/**
