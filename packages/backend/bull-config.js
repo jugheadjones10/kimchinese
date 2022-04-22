@@ -5,8 +5,8 @@ let port = 6379
 
 if(process.env.REDIS_URL){
   const url = new URL(process.env.REDIS_URL)
-  host = url.host
-  port = url.port
+  host = url.hostname
+  port = parseInt(url.port)
   console.log("redist", process.env.REDIS_URL)
   console.log("redist host", host)
   console.log("redist port", port)
