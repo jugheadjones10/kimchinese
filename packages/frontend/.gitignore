@@ -1,5 +1,4 @@
 # Node
-node_modules
 package-lock.json
 
 # Eleventy
@@ -8,7 +7,3 @@ netlify/functions/onrequest/**
 !netlify/functions/onrequest/**/index.js
 # Local Netlify folder
 .netlify
-
-# Google Sheet Credentials
-google-credentials.json
-.env
