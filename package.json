@@ -9,7 +9,10 @@
   ],
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "backend": "npm run start --workspace=packages/backend"
+    "backend": "npm run start --workspace=packages/backend",
+    "frontend": "npm run dev --workspace=packages/frontend",
+    "build-frontend": "npm run build --workspace=packages/frontend",
+    "start": "npm run backend & npm run frontend"
   },
   "keywords": [],
   "author": "",

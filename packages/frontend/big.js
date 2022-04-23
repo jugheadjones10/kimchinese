@@ -20,7 +20,7 @@ addEventListener("load", () => {
       this.key = Number(this.slide.dataset.key)
       this.efactor = Number(this.slide.dataset.efactor)
       this.interval = Number(this.slide.dataset.interval)
-      this.repetition = Number(this.slide.dataset.repetition)
+     this.repetition = Number(this.slide.dataset.repetition)
 
       this.correct = false
       this.opened = false
@@ -177,7 +177,7 @@ addEventListener("load", () => {
       email: buildData["email"]
     }
 
-    fetch('http://158.247.193.21:8888/.netlify/functions/onpost', {
+    fetch(functionUrl, {
         method: "POST",
         headers: {'Content-Type': 'application/json'}, 
         body: JSON.stringify({

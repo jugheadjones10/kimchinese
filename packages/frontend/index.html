@@ -11,8 +11,9 @@ permalink:
     <link href="big.css" rel="stylesheet" type="text/css" />
     <!-- Is the below loading strategy correct? -->
     <script>
-        var buildData = JSON.parse('{{ get-data | json }}')
-        console.log("Build data", JSON.stringify(buildData))
+      var functionUrl = '{{ get-function-endpoint }}'
+      var buildData = JSON.parse('{{ get-data | json }}')
+      console.log("Build data", JSON.stringify(buildData))
     </script>
 
     <script type="module" src="big.js"></script>
@@ -20,7 +21,7 @@ permalink:
   <body>
     {% for row in get-data.words %}
 
-    {% if row.type == "coverType" %}
+   {% if row.type == "coverType" %}
 
     <div class="slide" 
       data-slide-type="{{ row.type }}" 
