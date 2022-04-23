@@ -1,5 +1,5 @@
 const url = require('url');
-const { deflogger, imptlogger } = require("./logging.js")
+const { deflogger, imptlogger } = require("./src/logging.js")
 
 let host = process.env.REDIS_TEST_HOST
 let port = 6379
