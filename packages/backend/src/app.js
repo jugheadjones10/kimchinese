@@ -1,48 +1,33 @@
 const express = require("express");
-var fs = require('fs');
+const fs = require('fs');
 const path = require("path")
-var log4js = require("log4js");
 const { v4: uuidv4 } = require('uuid');
-var util = require('util')
-var cors = require('cors')
-
-// Router
-const enqueue = require("./routes/enqueue.js")
+const util = require('util')
+const cors = require('cors')
+const chalk = require("chalk")
 
 const puppeteer = require('puppeteer-extra')
 const StealthPlugin = require('puppeteer-extra-plugin-stealth')
+const { PromisePool } = require("./PromisePool.js")
 
+// Routes
+const enqueue = require("./routes/enqueue.js")
+
+// Logging
+const { deflogger, imptlogger } = require("./logging.js")
+
+// Bullboard UI
 const { createBullBoard } = require('@bull-board/api')
 const { BullMQAdapter } = require('@bull-board/api/bullMQAdapter')
 const { ExpressAdapter } = require('@bull-board/express')
 const { queue, worker } = require("./routes/queue.js")
 
-const { PromisePool } = require("./PromisePool.js")
-
 // DB
-const { getWords } = require("../db/get-words.js")
-const { scrapeAndCreateWord } = require("../db/scrape-and-create-word.js")
-const { createUser } = require("../db/create-user.js")
-
-require('dotenv').config()
+const getWords = require("../db/get-words.js")
+const scrapeAndCreateWord = require("../db/scrape-and-create-word.js")
+const createUser = require("../db/create-user.js")
 
 puppeteer.use(StealthPlugin())
-
-log4js.configure({
-	appenders: {
-		out: { type: 'stdout' },
-		app: { type: 'file', filename: 'logs/logs6' }
-	},
-	categories: {
-		default: { appenders: [ 'out' ], level: 'trace' },
-		app: { appenders: ['app'], level: 'trace' }
-	}
-});
-
-const logToFile = log4js.getLogger('app');
-
-
-const app = express();
 
 var cedict= JSON.parse(fs.readFileSync(path.resolve(__dirname, '../CEDICT2JSON/cedict-pretty.json'), 'utf8'))
 var indexedMap = {}
@@ -51,11 +36,9 @@ cedict.forEach(x => indexedMap[x.simplified] = {
 	definitions: x.definitions
 })
 
-//Cors allows webpack dev server at localhost:8080 to access my myanmar map API
+const app = express();
 app.use(cors());
 app.use(express.json());
-// app.use(express.urlencoded({ extended: true }));
-
 
 // Bullboard
 const serverAdapter = new ExpressAdapter();
@@ -72,17 +55,25 @@ app.use("/enqueue", enqueue)
 
 
 app.post("/hydrate-words", async function (req, res, next) {
+
+	deflogger.debug(`Received /hydrate-words POST req: ${req.body}!`)
+
 	try {
 
-		const reqId = uuidv4()
+		// const reqId = uuidv4()
 
-		console.log("req", req.body)
 		const userReqWords = req.body.words
 		const username = req.body?.username || "noname"
 		const email = req.body.email
 
 		// Client website uses Luxon to generate current UTC time and also to get the user's IANA timezone
 		const { isoTime, IANA } = req.body
+
+		deflogger.debug(`Attempting to create user: 
+			username: ${username}
+			email: ${email}
+			words: ${userReqWords}
+		`)
 
 		const browser = await puppeteer.launch({ 
 			headless: true, 
@@ -116,6 +107,7 @@ app.post("/hydrate-words", async function (req, res, next) {
 		res.status(200)
 
 	} catch(error){
+		imptlogger.error("Error handling /hydrate-words POST request: ", error)
 		return next(error)
 	}
 

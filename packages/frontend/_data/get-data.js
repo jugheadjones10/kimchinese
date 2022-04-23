@@ -18,13 +18,17 @@ module.exports = async function getData(configData){
 
   words.forEach(item => {
 
-    item.examples = fisherYatesShuffle(item.examples).slice(0, 2)
-    const arrayCopy = [...item.examples]
+    let arrayCopy
+    if(item.examples){
+      item.examples = fisherYatesShuffle(item.examples).slice(0, 2)
+      arrayCopy = [...item.examples]
+    }
 
     const array = ["coverType", "defType", "examplesType", "examplesType"]
     array.forEach(type => {
       if(type === "defType" && item.englishDefs[0].includes("English definition unavailable")) return
       if(type === "examplesType"){
+        if(!item.examples) return
         finalWords.push({
           ...item,
           type: type,
