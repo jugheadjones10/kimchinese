@@ -12,6 +12,7 @@ permalink:
     <!-- Is the below loading strategy correct? -->
     <script>
       var functionUrl = '{{ get-function-endpoint }}'
+      console.log("FUNCTION URL", functionUrl)
       var buildData = JSON.parse('{{ get-data | json }}')
       console.log("Build data", JSON.stringify(buildData))
     </script>

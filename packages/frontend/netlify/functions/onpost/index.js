@@ -28,7 +28,7 @@ async function handler(event) {
 
     }else{
       const { userDetails, words } = JSON.parse(event.body)
-      const { IANA, username, email } = userDetails
+      const { username, email } = userDetails
 
       const updateArr = Object.values(words)
       console.log("updateArr", updateArr)
@@ -38,7 +38,7 @@ async function handler(event) {
         // console.log("Due date in korea time", DateTime.fromISO(item.dueDate, { IANA }))
         // console.log("Due date in start of day", DateTime.fromISO(item.dueDate, { IANA }).startOf("day").toISO())
         // console.log("Due date in start of day UTC", DateTime.fromISO(item.dueDate, { IANA }).startOf("day").toUTC().toISO())
-        scheduleDates.add(DateTime.fromISO(item.dueDate, { IANA }).startOf("day").toUTC().toISO())
+        scheduleDates.add(item.dueDate)
       })
 
       console.log(JSON.stringify({

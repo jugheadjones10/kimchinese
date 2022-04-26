@@ -53,6 +53,18 @@ app.use('/admin/queues', serverAdapter.getRouter())
 
 app.use("/enqueue", enqueue)
 
+const multer = require('multer')
+const upload = multer()
+app.post("/email", upload.any(), async (req, res) => {
+	const body = req.body
+	console.log("dkim: ", body.dkim);
+	console.log("to: ", body.to);
+	console.log("cc: ", body.cc);
+	console.log("from: ", body.from);
+	console.log("subject: ", body.subject);	
+	return res.status(200).send()
+})
+
 
 app.post("/hydrate-words", async function (req, res, next) {
 

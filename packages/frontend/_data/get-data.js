@@ -5,12 +5,9 @@ module.exports = async function getData(configData){
 
   const username = configData.eleventy?.serverless?.query?.username || "dick"
 
-  const IANA = await macroMetaFetch("get-user-iana", { username })
-  console.log("IANA", IANA)
-
-  const { email, words } = await macroMetaFetch("get-by-date", { 
+  const { IANA, email, words } = await macroMetaFetch("get-by-date", { 
     username, 
-    filterTime: DateTime.local({ zone: IANA }).endOf("day").toUTC().toISO()
+    filterTime: DateTime.utc().toISO()
   })
 
   const { fisherYatesShuffle } = await import("project-utils") 

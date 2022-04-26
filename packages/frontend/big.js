@@ -168,12 +168,11 @@ addEventListener("load", () => {
     }
 
     for(const [key, value] of Object.entries(tempStore)){
-      supermemo(value, value.grade)
+      supermemo(value, value.grade, buildData["IANA"])
     }
 
     const userDetails = {
       username: buildData["username"],
-      IANA: buildData["IANA"],
       email: buildData["email"]
     }
 
