@@ -4,7 +4,7 @@
   "description": "",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "netlify dev --functionsPort 8888 --port 8088"
+    "start": "netlify dev --functionsPort 8888 --port 8088"
   },
   "keywords": [],
   "author": "",

@@ -8,11 +8,9 @@
   ],
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "backend": "npm run start --workspace=packages/backend",
-    "frontend": "npm run dev --workspace=packages/frontend",
-    "build-frontend": "npm run build --workspace=packages/frontend",
-    "start": "npm run backend & npm run frontend",
-    "build": "npm run build -w=packages/frontend || { cat /opt/buildhome/.npm/_logs/* ; sleep 30 ; false; }"
+    "backend": "npm start --workspace=packages/backend",
+    "frontend": "npm start --workspace=packages/frontend",
+    "start": "concurrently 'npm run backend' 'npm run frontend'"
   },
   "keywords": [],
   "author": "",
