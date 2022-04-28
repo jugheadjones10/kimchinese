@@ -176,7 +176,7 @@ addEventListener("load", () => {
       email: buildData["email"]
     }
 
-    fetch(functionUrl, {
+    fetch(functionEndpoint, {
         method: "POST",
         headers: {'Content-Type': 'application/json'}, 
         body: JSON.stringify({

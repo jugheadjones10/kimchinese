@@ -21,7 +21,7 @@ module.exports = async function macroMetaFetch(query, body){
     throw `
     MacroMeta fetch returned error for query:
     Query: ${query}
-    Body: ${JSON.stringify(body)}
+   Body: ${JSON.stringify(body)}
     Response: ${data}
     `
   }

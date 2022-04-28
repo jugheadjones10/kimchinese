@@ -11,8 +11,8 @@ permalink:
     <link href="big.css" rel="stylesheet" type="text/css" />
     <!-- Is the below loading strategy correct? -->
     <script>
-      var functionUrl = '{{ get-function-endpoint }}'
-      console.log("FUNCTION URL", functionUrl)
+      var functionEndpoint = '{{ environment.functionEndpoint }}'
+      console.log("FUNCTION URL", functionEndpoint)
       var buildData = JSON.parse('{{ get-data | json }}')
       console.log("Build data", JSON.stringify(buildData))
     </script>

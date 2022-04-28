@@ -4,8 +4,8 @@
   "description": "",
   "main": "src/index.js",
   "scripts": {
-    "test": "NODE_OPTIONS=--experimental-vm-modules jest",
-    "start": "node 'src/index.js'"
+    "test": "DOTENV_CONFIG_PATH=.test.env NODE_OPTIONS=--experimental-vm-modules jest $npm_config_file --detectOpenHandles --setupFilesAfterEnv=dotenv/config",
+    "start": "DOTENV_CONFIG_PATH=.dev.env node -r dotenv/config 'src/index.js'"
   },
   "keywords": [],
   "author": "",

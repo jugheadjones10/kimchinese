@@ -7,3 +7,6 @@ _generated_by_eleventy_serverless = "onrequest"
 
 [functions]
 directory = "netlify/functions/"
+
+[dev]
+envFiles = [ ".dev.env" ]

@@ -1,6 +1,6 @@
 const { Worker, Queue, QueueScheduler } = require("bullmq")
 
-const { config } =  require("../../bull-config")
+const config =  require("../../bull-config")
 const monitorQueue = require("./monitor-queue.js")
 const jobProcessor = require("./job-processor.js")
 

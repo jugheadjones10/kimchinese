@@ -1,8 +1,5 @@
 const fetch = (...args) => import('node-fetch').then(({default: fetch}) => fetch(...args));
 const { DateTime } = require("luxon");
-require('dotenv').config()
-
-const backendEndpoint = process.env.NODE_ENV === "production" ? process.env.BACKEND_ENDPOINT_PROD : process.env.BACKEND_ENDPOINT_TEST
 
 const macroMetaFetch = require("../../../macrometa-fetch.js")
 
@@ -47,7 +44,7 @@ async function handler(event) {
         email
       }))
 
-      const scheduleDatesPromise = fetch(backendEndpoint + "/enqueue", {
+      const scheduleDatesPromise = fetch(process.env.BACKEND_ENDPOINT + "/enqueue", {
         method: "POST",
         headers: { "Content-Type": "application/json"},
         body: JSON.stringify({

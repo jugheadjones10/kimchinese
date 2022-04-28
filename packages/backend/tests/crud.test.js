@@ -14,6 +14,7 @@ test('GET all words fails correctly', async () => {
   expect.assertions(1);
   try {
     const words = await getWords("wrongquery")
+    await process.nextTick(() => {})
   } catch (e) {
     console.log("GET words error: ", e)
     expect(e).toMatch('MacroMeta fetch returned error for query:');

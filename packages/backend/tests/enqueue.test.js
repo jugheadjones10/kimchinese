@@ -1,19 +1,15 @@
 const request = require("supertest");
 var { DateTime } = require("luxon")
 const multer = require('multer')
+const IORedis = require("ioredis");
 
 const express = require("express");
 var cors = require('cors')
 
-require('dotenv').config()
 const sgMail = require("@sendgrid/mail");
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
-let app
-let server
-let topWorker
-let topQueue
-let topScheduler
+let app, server, topWorker, topQueue, topScheduler, redisConnection
 
 beforeAll(() => {
   // Crucial realization here: I tried to reset modules because I wanted new queues to be created for every test run so that
@@ -32,12 +28,25 @@ beforeAll(() => {
 //Test not yet complete
 test('enqueue post request sends email correctly', (done) => {
 
+  jest.doMock("../bull-config.js", () => {
+    redisConnection = new IORedis(process.env.REDIS_URL, {
+      db: process.env.REDIS_DB,
+      maxRetriesPerRequest: null
+    })
+
+    return  {
+      concurrency: 1,
+      queueName: "mailbot",
+      connection: redisConnection
+    }
+  })
+
   jest.doMock("../src/routes/job-processor.js", () => {
     return jest.fn(async (job) => {
 
       const msg = {
         to: job.data.to, // Change to your recipient
-        from: process.env.VERIFIED_SENDER, // Change to your verified sender
+        from: "app@kimchinese.com", // Change to your verified sender
         subject: "Here's your flashcards review link!",
         text: job.id
       }
@@ -74,9 +83,10 @@ test('enqueue post request sends email correctly', (done) => {
 
   const username = "harry"
   const scheduleDates = [
-    DateTime.local({ zone: "Asia/Seoul" }).plus({ minutes: 1 }).toUTC().toISO(), 
-    DateTime.local({ zone: "Asia/Seoul" }).plus({ minutes: 2 }).toUTC().toISO()
+    DateTime.local({ zone: "Asia/Seoul" }).plus({ seconds: 10 }).toUTC().toISO(), 
+    DateTime.local({ zone: "Asia/Seoul" }).plus({ seconds: 20 }).toUTC().toISO()
   ]
+
   console.log("Scheduled dates: ", scheduleDates)
 
   const emailSendArray = scheduleDates.map(date => username + date)
@@ -99,7 +109,7 @@ test('enqueue post request sends email correctly', (done) => {
   request(app)
     .post("/enqueue")
     .send({
-      email: process.env.TEST_EMAIL_RECEIVER,
+      email: "test@inbound.kimchinese.com",
       username,
       scheduleDates
     })
@@ -108,9 +118,10 @@ test('enqueue post request sends email correctly', (done) => {
       if (err) return done(err);
     });
 
-}, 600000);
+}, 180000);
 
 afterAll(async () => {
+
   await new Promise((resolve, reject) => {
     server.close((e) => {
       if(e) reject(e)
@@ -118,8 +129,13 @@ afterAll(async () => {
     })
   })
 
+  // Order here is important. Closing redis before closing the queue will throw an error.
   await topQueue.close()
   await topWorker.close()
   await topScheduler.close()
+
+  await redisConnection.flushdb()
+  redisConnection.disconnect()
+
 })
 

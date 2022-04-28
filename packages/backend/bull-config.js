@@ -1,18 +1,10 @@
-const url = require('url');
-const { deflogger, imptlogger } = require("./src/logging.js")
+const IORedis = require("ioredis");
 
-let connection = {
-  host: process.env.REDIS_TEST_HOST,
-  port: 6379
-}
-
-if(process.env.REDIS_URL){
-  const IORedis = require("ioredis");
-  connection = new IORedis(process.env.REDIS_URL)
-}
-
-exports.config = {
-  concurrency: parseInt(process.env.QUEUE_CONCURRENCY || "1"),
+module.exports = {
+  concurrency: 1,
   queueName: "mailbot",
-  connection
+  connection: new IORedis(process.env.REDIS_URL, {
+      db: process.env.REDIS_DB || 0,
+      maxRetriesPerRequest: null
+  })
 };
