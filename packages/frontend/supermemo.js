@@ -27,11 +27,11 @@ export default function supermemo(item, grade, IANA){
   if (nextEfactor < 1.3) nextEfactor = 1.3;
 
   try{
-  item.interval = nextInterval
-  item.repetition = nextRepetition
-  item.efactor = nextEfactor
-  item.dueDate = DateTime.local({ zone: IANA}).plus({ days: interval }).startOf("day").toUTC().toISO()
-  delete item.grade
+    item.interval = nextInterval
+    item.repetition = nextRepetition
+    item.efactor = nextEfactor
+    item.dueDate = DateTime.local({ zone: IANA}).plus({ days: interval }).startOf("day").toUTC().toISO()
+    delete item.grade
   }catch(e){
     console.log("Dayjs error", e)
   }
