@@ -98,6 +98,7 @@ app.post("/hydrate-words", async function (req, res, next) {
 				}
 			}
 		}
+
 		const scrapeAndCreatePromisePool = new PromisePool(wordScrapeGenerator(), 5)
 
 		await Promise.all([scrapeAndCreatePromisePool.start(), createUserPromise])

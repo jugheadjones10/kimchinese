@@ -1,3 +1,2 @@
 [build]
-  base = "packages/frontend/"
   command = "npm run build || { cat /opt/buildhome/.npm/_logs/* ; sleep 30 ; false; }"
