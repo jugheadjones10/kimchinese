@@ -8,31 +8,29 @@ const { queue, worker } = require("./queue.js")
 
 router.post('/', async (req, res) => {
 
-  const { email, username, scheduleDates } = req.body
+  const { email, username, scheduledDate } = req.body
 
-  await Promise.all(scheduleDates.map(date => {
+  deflogger.debug(`
+    Added job for email at: ${scheduledDate}
+    Username: ${username}
+    Email: ${email}
+    Delay from now: ${DateTime.fromISO(scheduledDate).diffNow("seconds").seconds}
+  `)
 
-    deflogger.debug(`
-      Added job for email at: ${date}
-      Username: ${username}
-      Email: ${email}
-      Delay from now: ${DateTime.fromISO(date).diffNow("seconds").seconds}
-    `)
-
-    //Date and username are added to display in bullboard
-    return queue.add("send email", {
-      to: email,
-      html: `<a href="www.example.com">Here's your link</a>`,
-      date,
-      username
-   }, 
-      {
-        jobId: username + date,
-        delay: DateTime.fromISO(date).diffNow().toMillis() 
-      })
-  }))
+  //Date and username are added to display in bullboard
+  await queue.add("send email", {
+    to: email,
+    html: `<a href="www.example.com">Here's your link</a>`,
+    scheduledDate,
+    username
+  }, 
+   {
+     jobId: username + scheduledDate,
+     delay: DateTime.fromISO(scheduledDate).diffNow().toMillis() 
+   })
 
   res.sendStatus(200)
+ 
 })
 
 module.exports = router

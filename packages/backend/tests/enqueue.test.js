@@ -51,6 +51,7 @@ test('enqueue post request sends email correctly', (done) => {
         text: job.id
       }
       const response = await sgMail.send(msg)
+      console.log("Email send response: ", response)
       if(response[0].statusCode !== 202) done("Wrong email response: " + response)
 
     })
@@ -82,14 +83,14 @@ test('enqueue post request sends email correctly', (done) => {
   app.use("/enqueue", enqueue)
 
   const username = "harry"
-  const scheduleDates = [
+  const scheduledDates = [
     DateTime.local({ zone: "Asia/Seoul" }).plus({ seconds: 10 }).toUTC().toISO(), 
     DateTime.local({ zone: "Asia/Seoul" }).plus({ seconds: 20 }).toUTC().toISO()
   ]
 
-  console.log("Scheduled dates: ", scheduleDates)
+  console.log("Scheduled dates: ", scheduledDates)
 
-  const emailSendArray = scheduleDates.map(date => username + date)
+  const emailSendArray = scheduledDates.map(date => username + date)
 
   const upload = multer()
   app.post("/email", upload.any(), (req, res) => {
@@ -106,19 +107,21 @@ test('enqueue post request sends email correctly', (done) => {
     return res.sendStatus(200)
   })
 
-  request(app)
-    .post("/enqueue")
-    .send({
-      email: "test@inbound.kimchinese.com",
-      username,
-      scheduleDates
-    })
-    .expect(200)
-    .end((err, res) => {
-      if (err) return done(err);
-    });
+  // scheduledDates.forEach(scheduledDate => {
+    request(app)
+      .post("/enqueue")
+      .send({
+        email: "test@inbound.kimchinese.com",
+        username,
+        scheduledDate: DateTime.local({ zone: "Asia/Seoul" }).plus({ seconds: 10 }).toUTC().toISO(), 
+      })
+      .expect(200)
+      .end((err, res) => {
+        if (err) return done(err);
+      });
+  // })
 
-}, 180000);
+}, 30000);
 
 afterAll(async () => {
 

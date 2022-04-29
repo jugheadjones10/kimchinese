@@ -4,7 +4,8 @@
   "description": "",
   "workspaces": [
     "packages/frontend",
-    "packages/backend"
+    "packages/backend",
+    "packages/landing"
   ],
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",

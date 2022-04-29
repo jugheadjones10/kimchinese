@@ -1,7 +1,7 @@
 # Node
 package-lock.json
 
-.env
+*.env
 
 # Eleventy
 _site

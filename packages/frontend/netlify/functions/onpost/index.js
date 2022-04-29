@@ -20,7 +20,7 @@ async function handler(event) {
       return {
         statusCode: 200, 
         headers,
-        body: 'success'
+       body: 'success'
       };
 
     }else{
@@ -44,18 +44,18 @@ async function handler(event) {
         email
       }))
 
-      const scheduleDatesPromise = fetch(process.env.BACKEND_ENDPOINT + "/enqueue", {
-        method: "POST",
-        headers: { "Content-Type": "application/json"},
-        body: JSON.stringify({
-          username,
-          email,
-          scheduleDates: [...scheduleDates]
-        })
-      })
+      // const scheduleDatesPromise = fetch(process.env.BACKEND_ENDPOINT + "/enqueue", {
+      //   method: "POST",
+      //   headers: { "Content-Type": "application/json"},
+      //   body: JSON.stringify({
+      //     username,
+      //     email,
+      //     scheduleDates: [...scheduleDates]
+      //   })
+      // })
 
       await Promise.all([
-        scheduleDatesPromise,
+        // scheduleDatesPromise,
         ...updateArr.map(item => {
           item.key = item.key.toString()
           return macroMetaFetch("update-word", item)
