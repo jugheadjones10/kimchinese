@@ -21,7 +21,7 @@ async function handler(event) {
       headers: {
        "Content-Type": "text/html; charset=UTF-8",
       },
-      body: html
+     body: html
     };
 
   } catch (error) {
