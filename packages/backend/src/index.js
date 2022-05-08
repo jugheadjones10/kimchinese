@@ -1,5 +1,5 @@
 const app = require("./app")
-const { deflogger, imptlogger } = require("./logging.js")
+const { deflogger, imptlogger } = require("./logging")
 
 let port = process.env.PORT
 if (port == null || port == "") {

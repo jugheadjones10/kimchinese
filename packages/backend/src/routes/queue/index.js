@@ -2,9 +2,10 @@ const express = require('express')
 const router = express.Router()
 const { DateTime } = require("luxon")
 const chalk = require("chalk")
-const { deflogger, imptlogger } = require("../logging.js")
 
-const { queue, worker } = require("./queue.js")
+const { deflogger, imptlogger } = require("#src/logging")
+const { queue } = require("./queue-init")
+
 
 router.post('/', async (req, res) => {
 
@@ -24,13 +25,13 @@ router.post('/', async (req, res) => {
     scheduledDate,
     username
   }, 
-   {
-     jobId: username + scheduledDate,
-     delay: DateTime.fromISO(scheduledDate).diffNow().toMillis() 
-   })
+    {
+      jobId: username + scheduledDate,
+      delay: DateTime.fromISO(scheduledDate).diffNow().toMillis() 
+    })
 
   res.sendStatus(200)
- 
+
 })
 
 module.exports = router

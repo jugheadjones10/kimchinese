@@ -1,6 +1,5 @@
 const fetch = require("node-fetch-commonjs")
-var { DateTime } = require("luxon")
-const macroMetaFetch = require("./macrometa-fetch.js")
+const macroMetaFetch = require("./macrometa-fetch")
 
 module.exports = async function createUser({userReqWords, username, isoTime, IANA, email, query = "insert-user"}) {
 

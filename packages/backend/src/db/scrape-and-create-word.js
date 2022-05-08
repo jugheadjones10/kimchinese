@@ -1,9 +1,10 @@
 const fetch = require("node-fetch-commonjs")
 const fs = require("fs")
-const macroMetaFetch = require("./macrometa-fetch.js")
-const { deflogger, imptlogger } = require("../src/logging.js")
+const path = require("path")
+const macroMetaFetch = require("./macrometa-fetch")
+const { deflogger, imptlogger } = require("#src/logging")
 
-var cedict= JSON.parse(fs.readFileSync('./CEDICT2JSON/cedict-pretty.json', 'utf8'))
+var cedict= JSON.parse(fs.readFileSync(path.resolve(__dirname, '../../CEDICT2JSON/cedict-pretty.json'), 'utf8'))
 var indexedMap = {}
 cedict.forEach(x => indexedMap[x.simplified] = {
 	definitions: x.definitions

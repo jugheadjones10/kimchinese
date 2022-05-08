@@ -1,6 +1,5 @@
-const scrapeAndCreateWord = require('../db/scrape-and-create-word.js');
-const macroMetaFetch = require("../db/macrometa-fetch.js")
-require('dotenv').config()
+const scrapeAndCreateWord = require('#db/scrape-and-create-word');
+const macroMetaFetch = require("#db/macrometa-fetch")
 
 // Apparently jest-puppeteer doesn't support plugins
 // const StealthPlugin = require('puppeteer-extra-plugin-stealth')
@@ -21,7 +20,7 @@ test('scrape and create word', async () => {
   expect(examples).toHaveLength(20)
   expect(pinyin).toBe("yǔ zhòng xīn cháng")
   
-  //Cleanup
+ //Cleanup
   await macroMetaFetch("remove-word", { _key })
 
 });

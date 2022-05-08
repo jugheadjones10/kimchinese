@@ -1,5 +1,5 @@
 const fetch = require("node-fetch-commonjs")
-const macroMetaFetch = require("./macrometa-fetch.js")
+const macroMetaFetch = require("./macrometa-fetch")
 
 module.exports = async function getWords(query = "getwords") {
 	const result = await macroMetaFetch(query, {})
