@@ -17,7 +17,7 @@ puppeteer.use(StealthPlugin())
 
 router.post('/', async function (req, res, next) {
 
-	deflogger.debug(`Received /hydrate-words POST req: ${req.body}!`)
+	deflogger.debug(`Received /hydrate-words POST req: ${JSON.stringify(req.body)}!`)
 
 	try {
 
@@ -39,7 +39,7 @@ router.post('/', async function (req, res, next) {
 			args: ['--no-sandbox', '--disable-setuid-sandbox']
 		})
 
-		const createUserPromise = createUser(userReqWords, username, isoTime, IANA, email)
+		const createUserPromise = createUser({userReqWords, username, isoTime, IANA, email})
 
 		// Get all words in the database to check against the user's words list
 		const words = await getWords()

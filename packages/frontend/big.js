@@ -146,7 +146,7 @@ addEventListener("load", () => {
   slideDivs.forEach(x => console.log(x.word))
 
   function batchUpdate(){
-    const results = {}
+   const results = {}
 
     let tempStore = {}
     //When you have time, try and get /data.json to work so that you don't need to stuff data in html data attributes
@@ -168,6 +168,7 @@ addEventListener("load", () => {
     }
 
     for(const [key, value] of Object.entries(tempStore)){
+      console.log("KEY VALUE PAIRS", key, value)
       supermemo(value, value.grade, buildData["IANA"])
     }
 
@@ -175,6 +176,8 @@ addEventListener("load", () => {
       username: buildData["username"],
       email: buildData["email"]
     }
+
+    console.log("TEMPSTORE", JSON.stringify(tempStore))
 
     fetch(functionEndpoint, {
         method: "POST",

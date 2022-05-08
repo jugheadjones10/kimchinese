@@ -3,12 +3,13 @@ const macroMetaFetch = require("../macrometa-fetch.js")
 
 module.exports = async function getData(configData){
 
-  const username = configData.eleventy?.serverless?.query?.username || "dick"
+  const username = configData.eleventy?.serverless?.query?.username || "kimchinese"
 
   const { IANA, email, words } = await macroMetaFetch("get-by-date", { 
     username, 
     filterTime: DateTime.utc().toISO()
   })
+  console.log("Words from DB:", words)
 
   const { fisherYatesShuffle } = await import("project-utils") 
   const finalWords = []
@@ -40,6 +41,8 @@ module.exports = async function getData(configData){
     })
 
   })
+
+  console.log("Processed Words:", finalWords)
 
   return {
     words: fisherYatesShuffle(finalWords),

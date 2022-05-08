@@ -30,7 +30,7 @@ export default function supermemo(item, grade, IANA){
     item.interval = nextInterval
     item.repetition = nextRepetition
     item.efactor = nextEfactor
-    item.dueDate = DateTime.local({ zone: IANA}).plus({ days: interval }).startOf("day").toUTC().toISO()
+    item.dueDate = DateTime.local({ zone: IANA}).plus({ days: nextInterval }).startOf("day").toUTC().toISO()
     delete item.grade
   }catch(e){
     console.log("Dayjs error", e)
