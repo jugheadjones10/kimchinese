@@ -1,5 +1,6 @@
 const { DateTime } = require("luxon");
 const macroMetaFetch = require("../macrometa-fetch.js")
+const fisherYatesShuffle = require("project-utils")
 
 module.exports = async function getData(configData){
 
@@ -11,7 +12,6 @@ module.exports = async function getData(configData){
   })
   console.log("Words from DB:", words)
 
-  const { fisherYatesShuffle } = await import("project-utils") 
   const finalWords = []
 
   words.forEach(item => {
@@ -20,7 +20,7 @@ module.exports = async function getData(configData){
     if(item.examples){
       item.examples = fisherYatesShuffle(item.examples).slice(0, 2)
       arrayCopy = [...item.examples]
-    }
+   }
 
     const array = ["coverType", "defType", "examplesType", "examplesType"]
     array.forEach(type => {
