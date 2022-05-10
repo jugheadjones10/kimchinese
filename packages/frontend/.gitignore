@@ -7,5 +7,6 @@ package-lock.json
 _site
 netlify/functions/onrequest/**
 !netlify /functions/onrequest/**/index.js
+
 # Local Netlify folder
 .netlify
