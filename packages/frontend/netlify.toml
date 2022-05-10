@@ -7,7 +7,6 @@ _generated_by_eleventy_serverless = "onrequest"
 
 [functions]
 directory = "netlify/functions/"
-external_node_modules = ["node-fetch"]
 
 [dev]
 envFiles = [ ".dev.env" ]

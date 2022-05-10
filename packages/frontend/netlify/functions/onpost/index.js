@@ -1,4 +1,4 @@
-const fetch = (...args) => import('node-fetch').then(({default: fetch}) => fetch(...args));
+const fetch = require("node-fetch")
 const { DateTime } = require("luxon");
 
 const macroMetaFetch = require("../../../macrometa-fetch.js")
@@ -21,7 +21,7 @@ async function handler(event) {
         statusCode: 200, 
         headers,
        body: 'success'
-      };
+     };
 
     }else{
       const { userDetails, words } = JSON.parse(event.body)

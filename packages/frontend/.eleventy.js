@@ -1,5 +1,5 @@
 const { EleventyServerlessBundlerPlugin } = require("@11ty/eleventy");
-// require('dotenv').config({ path: ".dev.env" })
+require('dotenv').config({ path: ".dev.env" })
 // Don't use eleventy command when developing locally - I think it doesn't support functions that aren't for building. Use netlify
 // dev
 
