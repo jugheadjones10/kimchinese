@@ -4,8 +4,10 @@
   "description": "",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "netlify dev --functionsPort 8888 --port 8088",
-    "build": "eleventy"
+    "netlify-start": "netlify dev --functionsPort 8888 --port 8088",
+    "build": "DEBUG=* eleventy",
+    "start": "eleventy --serve",
+    "postinstall": "patch-package"
   },
   "keywords": [],
   "author": "",
@@ -21,6 +23,7 @@
     "jsonfile": "^6.1.0",
     "luxon": "^2.3.1",
     "node-fetch": "^2.6.7",
+    "patch-package": "^6.4.7",
     "project-utils": "file:shared/project-utils"
   }
 }

@@ -9,7 +9,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "backend": "npm start --workspace=packages/backend",
-    "frontend": "npm start --workspace=packages/frontend",
+    "frontend": "npm run netlify-start --workspace=packages/frontend",
     "start": "concurrently 'npm run backend' 'npm run frontend'"
   },
   "keywords": [],

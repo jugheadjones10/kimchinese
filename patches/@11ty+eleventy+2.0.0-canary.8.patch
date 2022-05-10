@@ -1,0 +1,36 @@
+diff --git a/node_modules/@11ty/eleventy/src/Serverless.js b/node_modules/@11ty/eleventy/src/Serverless.js
+index a0509a8..339fa8d 100644
+--- a/node_modules/@11ty/eleventy/src/Serverless.js
++++ b/node_modules/@11ty/eleventy/src/Serverless.js
+@@ -111,8 +111,13 @@ class Serverless {
+     debug(`Including config info file from ${fullPath}`);
+     // TODO dedicated reset method, don’t delete this every time
+     deleteRequireCache(fullPath);
+-
+-    let configInfo = require(fullPath);
++    // try{
++      let configInfo = require(fullPath);
++    // }catch(e){
++    //   console.log("full path: ", fullPath)
++    //   console.log("O crapaddodle?,", e)
++    // }
++    console.log("THE config info", configInfo)
+     return configInfo;
+   }
+ 
+@@ -141,6 +146,7 @@ class Serverless {
+         });
+       }
+     }
++    console.log("THE matches", matches)
+ 
+     if (matches.length) {
+       if (matches.length > 1) {
+@@ -169,6 +175,7 @@ class Serverless {
+       this.getConfigInfo().dir.input;
+     let configPath = path.join(this.dir, this.configFilename);
+     let { pathParams, inputPath } = this.matchUrlPattern(this.path);
++    console.log("PathParams:", pathParams, "InputPath", inputPath)
+ 
+     if (!pathParams || !inputPath) {
+       let err = new Error(
