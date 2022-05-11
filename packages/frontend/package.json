@@ -4,7 +4,7 @@
   "description": "",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "netlify-start": "netlify dev --functionsPort 8888 --port 8088",
+    "dev": "netlify dev --functionsPort 8888 --port 8088",
     "build": "DEBUG=* eleventy",
     "start": "eleventy --serve",
     "postinstall": "patch-package"
