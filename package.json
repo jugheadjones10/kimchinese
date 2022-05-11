@@ -10,6 +10,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "backend": "npm run dev --workspace=packages/backend",
     "frontend": "npm run dev netlify-start --workspace=packages/frontend",
+    "start-backend": "npm start --workspace=packages/backend",
     "start": "concurrently 'npm run backend' 'npm run frontend'"
   },
   "keywords": [],

@@ -1,4 +1,4 @@
-const fetch = require("node-fetch-commonjs")
+const fetch = require("node-fetch")
 
 module.exports = async function macroMetaFetch(query, body){
 
@@ -20,7 +20,7 @@ module.exports = async function macroMetaFetch(query, body){
   console.log(data)
 
   if(data.error){
-    throw `
+   throw `
     MacroMeta fetch returned error for query:
     Query: ${query}
    Body: ${JSON.stringify(body)}

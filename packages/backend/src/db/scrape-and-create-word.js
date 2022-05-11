@@ -1,4 +1,4 @@
-const fetch = require("node-fetch-commonjs")
+const fetch = require("node-fetch")
 const fs = require("fs")
 const path = require("path")
 const macroMetaFetch = require("./macrometa-fetch")
