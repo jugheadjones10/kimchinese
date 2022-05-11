@@ -73,7 +73,7 @@ async function handler(event) {
 
   } catch (error) {
 
-    console.log("Error", error)
+    console.log("Error", JSON.stringify(error))
 
     return {
       statusCode: error.httpStatusCode || 500,
