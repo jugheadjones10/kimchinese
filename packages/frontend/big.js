@@ -1,4 +1,4 @@
-import { fisherYatesShuffle } from "./shared/project-utils/index.mjs"
+import { fisherYatesShuffle } from "./project-utils/index.mjs"
 import supermemo from "./supermemo.js"
 
 addEventListener("load", () => {
