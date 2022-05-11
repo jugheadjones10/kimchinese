@@ -1,4 +1,4 @@
-import { fisherYatesShuffle } from "./shared/project-utils/index.js"
+import { fisherYatesShuffle } from "./shared/project-utils/index.mjs"
 import supermemo from "./supermemo.js"
 
 addEventListener("load", () => {
@@ -20,7 +20,7 @@ addEventListener("load", () => {
       this.key = Number(this.slide.dataset.key)
       this.efactor = Number(this.slide.dataset.efactor)
       this.interval = Number(this.slide.dataset.interval)
-     this.repetition = Number(this.slide.dataset.repetition)
+    this.repetition = Number(this.slide.dataset.repetition)
 
       this.correct = false
       this.opened = false

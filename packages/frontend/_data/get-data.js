@@ -1,6 +1,6 @@
 const { DateTime } = require("luxon");
 const macroMetaFetch = require("../macrometa-fetch.js")
-const fisherYatesShuffle = require("project-utils")
+const fisherYatesShuffle = require("../shared/project-utils")
 
 module.exports = async function getData(configData){
 
