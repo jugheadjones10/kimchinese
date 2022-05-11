@@ -7,7 +7,7 @@
   "scripts": {
     "test": "DOTENV_CONFIG_PATH=.test.env NODE_OPTIONS=--experimental-vm-modules jest $npm_config_file --detectOpenHandles --setupFilesAfterEnv=dotenv/config",
     "dev": "DOTENV_CONFIG_PATH=.dev.env node -r dotenv/config 'src/index.js'",
-    "start": "node 'src/index.js"
+    "start": "node 'src/index.js'"
   },
   "imports": {
     "#db/*": "./src/db/*.js",
