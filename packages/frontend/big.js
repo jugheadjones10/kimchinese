@@ -2,12 +2,24 @@ import { fisherYatesShuffle } from "./project-utils/index.mjs"
 import supermemo from "./supermemo.js"
 
 addEventListener("load", () => {
+  class LastSlideDiv {
+    constructor(slideContainer, _i){
+      this._i = _i
+      this.slide = slideContainer.querySelector(".slide")
+      this.slide.setAttribute("tabindex", 0);
+
+      this.sc = slideContainer
+    }
+  }
 
   class SlideDiv {
-    constructor(slide, pc, _i){
+    constructor(slideContainer, _i){
       this._i = _i
-      this.slide = slide
+      // this.slide = slide
+      this.slide = slideContainer.querySelector(".slide")
       this.slide.setAttribute("tabindex", 0);
+
+      this.sc = slideContainer
 
       this.front = this.slide.querySelector(".slide__front")
       this.back = this.slide.querySelector(".slide__back")
@@ -20,30 +32,30 @@ addEventListener("load", () => {
       this.key = Number(this.slide.dataset.key)
       this.efactor = Number(this.slide.dataset.efactor)
       this.interval = Number(this.slide.dataset.interval)
-    this.repetition = Number(this.slide.dataset.repetition)
+      this.repetition = Number(this.slide.dataset.repetition)
 
       this.correct = false
       this.opened = false
 
       try{
-      if(this.type == "coverType"){
-        var wordContainer = this.front.querySelector(".slide__word-container")
-        wordContainer.removeChild(wordContainer.firstChild)
+        if(this.type == "coverType"){
+          var wordContainer = this.front.querySelector(".slide__word-container")
+          wordContainer.removeChild(wordContainer.firstChild)
 
-        //This assumes that coverTypes are 4 character words only
-        var randomIndexes = fisherYatesShuffle([0,1,2,3]).slice(0,2)
-        for (var i = 0; i < this.word.length; i++) {
-          var span
-          if(randomIndexes.includes(i)){
-            span = ce("span", "hidden-char");
-          }else{
-            span = ce("span")
+          //This assumes that coverTypes are 4 character words only
+          var randomIndexes = fisherYatesShuffle([0,1,2,3]).slice(0,2)
+          for (var i = 0; i < this.word.length; i++) {
+            var span
+            if(randomIndexes.includes(i)){
+              span = ce("span", "hidden-char");
+            }else{
+              span = ce("span")
+            }
+            span.innerText = this.word[i]
+            wordContainer.appendChild(span)
           }
-          span.innerText = this.word[i]
-          wordContainer.appendChild(span)
-        }
 
-      }
+        }
       }catch(e){
         console.log("Error: " +  e)
       }
@@ -79,8 +91,8 @@ addEventListener("load", () => {
 
       }
 
-      this.sc = pc.appendChild(ce("div", "slide-container"));
-      this.sc.appendChild(this.slide);
+      // this.sc = pc.appendChild(ce("div", "slide-container"));
+      // this.sc.appendChild(this.slide);
       this.setClickListeners()
     };
 
@@ -100,14 +112,14 @@ addEventListener("load", () => {
       this.noGotIt.addEventListener("click", onClickNoGotIt.bind(this));
 
       function onClickSlideContainer(e) {
-        // e.stopPropagation();
-        e.preventDefault();
+        e.stopPropagation();
+        // e.preventDefault();
         this.flip()
       }
 
       function onClickGotIt(e){
         e.stopPropagation();
-        e.preventDefault();
+        // e.preventDefault();
 
         if(big.current === big.length - 2){
           console.log("before last slide")
@@ -120,7 +132,7 @@ addEventListener("load", () => {
 
       function onClickNoGotIt(e){
         e.stopPropagation();
-        e.preventDefault();
+        // e.preventDefault();
 
         if(big.current === big.length - 2){
           console.log("before last slide")
@@ -134,19 +146,22 @@ addEventListener("load", () => {
 
   }
 
-  let slideDivs = Array.from(document.querySelectorAll(".slide"));
-  let pc = document.body.appendChild(ce("div", "presentation-container"));
-  pc.classList.add("pc")
+  // let slideDivs = Array.from(document.querySelectorAll(".slide"));
+  let slideDivs = Array.from(document.querySelectorAll(".slide-container"));
+  // let pc = document.body.appendChild(ce("div", "presentation-container"));
+  // pc.classList.add("pc")
 
+  console.log("SLIDE DIVS", slideDivs)
   slideDivs = slideDivs.map((slide, _i) => {
-    return new SlideDiv(slide, pc, _i)
+    if(_i === slideDivs.length - 1) return new LastSlideDiv(slide, _i)
+    return new SlideDiv(slide, _i)
   });
 
   console.log("Printing slides")
   slideDivs.forEach(x => console.log(x.word))
 
   function batchUpdate(){
-   const results = {}
+    const results = {}
 
     let tempStore = {}
     //When you have time, try and get /data.json to work so that you don't need to stuff data in html data attributes
@@ -159,7 +174,6 @@ addEventListener("load", () => {
       }else{
         tempStore[slideDiv.word] = {
           grade: gradeAddition,
-          key: slideDiv.key,
           efactor: slideDiv.efactor,
           interval: slideDiv.interval,
           repetition: slideDiv.repetition,
@@ -167,29 +181,29 @@ addEventListener("load", () => {
       }
     }
 
-    for(const [key, value] of Object.entries(tempStore)){
-      console.log("KEY VALUE PAIRS", key, value)
-      supermemo(value, value.grade, buildData["IANA"])
-    }
-
-    const userDetails = {
-      username: buildData["username"],
-      email: buildData["email"]
+    try{
+      for(const [key, value] of Object.entries(tempStore)){
+        console.log("KEY VALUE PAIRS", key, value)
+        supermemo(value, value.grade, userdata.IANA)
+      }
+    }catch(e){
+      console.log("FUCK", e)
     }
 
     console.log("TEMPSTORE", JSON.stringify(tempStore))
 
-    fetch(functionEndpoint, {
-        method: "POST",
-        headers: {'Content-Type': 'application/json'}, 
-        body: JSON.stringify({
-          words: tempStore,
-          userDetails
-        })
+    return fetch(functionEndpoint, {
+      method: "POST",
+      headers: {'Content-Type': 'application/json'}, 
+      body: JSON.stringify({
+        words: tempStore,
+        userdata
       })
+    })
       .then(res => {
         if(!res.ok) throw res.body
         console.log(JSON.stringify(res.body))
+        return res
       })
       .catch(e => alert("Error uploading session data: " + e))
 
@@ -203,7 +217,8 @@ addEventListener("load", () => {
       forward,
       reverse,
       go
-    });
+    })
+  let menuOpen = false
 
   function forward() {
     go(big.current + 1);
@@ -213,7 +228,9 @@ addEventListener("load", () => {
     go(big.current - 1);
   }
 
+  let counter = document.querySelector(".counter")
   function go(n, force) {
+    console.log("N received by go", n)
     n = Math.max(0, Math.min(big.length - 1, n));
     if (!force && big.current === n) return;
     var prevI = big.current
@@ -230,8 +247,10 @@ addEventListener("load", () => {
       }
     }
 
-    if (window.location.hash !== n) window.location.hash = n;
+    if (window.location.hash !== n + 1) window.location.hash = n + 1;
     document.title = slide.textContent;
+
+    counter.textContent = Math.min(n + 1, words.length) + "/" + words.length
   }
 
   function onKeyDown(e) {
@@ -249,13 +268,51 @@ addEventListener("load", () => {
     }
   }
 
+  //Menu setup
+  if(words.length > 0){
+    let menu = document.querySelector(".menu")
+    let overlay = document.querySelector(".overlay")
+    let endSession = document.querySelector(".end-session")
+    menu.addEventListener("click", function(e){
+      e.stopPropagation()
+
+      overlay.style.display = menuOpen ? "none" : "flex"
+      menu.style.color = menuOpen ? "black" : "white"
+      menu.style.right = menuOpen ? "10px" : "16px"
+      menu.innerHTML = menuOpen ? "&#xFE19;" : "&times;"
+
+      menuOpen = !menuOpen
+    })
+
+    endSession.addEventListener("click", function(e){
+      endSession.classList.add("playing")  
+      endSession.classList.remove("hover")  
+      endSession.style.color = "black"
+      // new Promise((res, rej) => {
+      //   setTimeout(() => {
+      //     res()
+      //   }, 5000)
+      // })
+      batchUpdate()
+        .then(res => {
+          menu.style.display = "none"  
+          overlay.style.backgroundColor = "white"
+          endSession.classList.remove("playing")  
+          endSession.textContent = "Session Finished"
+        }).catch(e => {
+          //TODO
+        })
+    })
+  }
+
   document.addEventListener("keydown", onKeyDown);
 
   addEventListener("hashchange", () => {
-    go(parseHash());
+    console.log("hash changed")
+    go(parseHash() - 1);
   });
 
-  go(parseHash() || big.current);
+  go(parseHash() - 1 || big.current);
 });
 
 function parseHash() {

@@ -6,11 +6,14 @@ module.exports = async function getData(configData){
 
   const username = configData.eleventy?.serverless?.query?.username || "kimchinese"
 
-  const { IANA, email, words } = await macroMetaFetch("get-by-date", { 
+  console.time("DB")
+  const { IANA, email, remainingwords, words, userkey } = await macroMetaFetch("get-by-date", { 
     username, 
     filterTime: DateTime.utc().toISO()
   })
+  console.timeEnd("DB")
   console.log("Words from DB:", words)
+  console.log("REMAINING WORDS", remainingwords)
 
   const finalWords = []
 
@@ -45,10 +48,15 @@ module.exports = async function getData(configData){
   console.log("Processed Words:", finalWords)
 
   return {
+    functionEndpoint: process.env.FUNCTION_ENDPOINT || "/.netlify/functions/onpost",
     words: fisherYatesShuffle(finalWords),
-    email,
-    username,
-    IANA
+    userdata: {
+      email,
+      username,
+      IANA,
+      userkey,
+      remainingwords
+    }
   }
 
 }

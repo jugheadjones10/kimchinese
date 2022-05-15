@@ -15,6 +15,7 @@ module.exports = function(eleventyConfig) {
   // Copy `img/` to `_site/img`
   eleventyConfig.addPassthroughCopy("big.css");
   eleventyConfig.addPassthroughCopy("big.js");
+  eleventyConfig.addPassthroughCopy("sentry.js");
   eleventyConfig.addPassthroughCopy("supermemo.js");
   eleventyConfig.addPassthroughCopy("project-utils");
 };

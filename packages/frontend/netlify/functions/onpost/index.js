@@ -1,7 +1,16 @@
 const fetch = require("node-fetch")
-const { DateTime } = require("luxon");
+const { DateTime } = require("luxon")
+const { object, string, number, date } = require("yup")
 
 const macroMetaFetch = require("../../../macrometa-fetch.js")
+
+let oSchema = object({
+  word: string().required(),
+  repetition: number().required().integer(),
+  interval: number().required().integer(),
+  efactor: number().required().positive(),
+  dueDate: string().required()
+}).noUnknown()
 
 async function handler(event) {
 
@@ -13,55 +22,36 @@ async function handler(event) {
       'Access-Control-Allow-Origin': '*',
       'Access-Control-Allow-Headers': 'Content-Type',
       'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE'
-    };
+    }
 
     if (event.httpMethod === 'OPTIONS') {
       // To enable CORS
       return {
         statusCode: 200, 
         headers,
-       body: 'success'
-     };
+        body: 'success'
+      }
 
     }else{
-      const { userDetails, words } = JSON.parse(event.body)
-      const { username, email } = userDetails
+      const { userdata, words } = JSON.parse(event.body)
+      const { remainingwords, username, email, userkey } = userdata
+      console.log("Remaining words", remainingwords)
 
-      const updateArr = Object.values(words)
+      const updateArr = []
+      for(const [word, value] of Object.entries(words)){
+        const o = { word, ...value }
+        const validatedO = oSchema.validateSync(o, { strict: true })
+        updateArr.push(validatedO)
+      }
       console.log("updateArr", updateArr)
+      const finalArr = updateArr.concat(remainingwords)
+      console.log("Final concatenated words", finalArr)
 
-      const scheduleDates = new Set()
-      updateArr.forEach(item => {
-        // console.log("Due date in korea time", DateTime.fromISO(item.dueDate, { IANA }))
-        // console.log("Due date in start of day", DateTime.fromISO(item.dueDate, { IANA }).startOf("day").toISO())
-        // console.log("Due date in start of day UTC", DateTime.fromISO(item.dueDate, { IANA }).startOf("day").toUTC().toISO())
-        scheduleDates.add(item.dueDate)
+      await macroMetaFetch("update-words", {
+        userkey,
+        words: finalArr
       })
-
-      console.log(JSON.stringify({
-        username,
-        scheduleDates: [...scheduleDates],
-        email
-      }))
-
-      // const scheduleDatesPromise = fetch(process.env.BACKEND_ENDPOINT + "/enqueue", {
-      //   method: "POST",
-      //   headers: { "Content-Type": "application/json"},
-      //   body: JSON.stringify({
-      //     username,
-      //     email,
-      //     scheduleDates: [...scheduleDates]
-      //   })
-      // })
-
-      await Promise.all([
-        // scheduleDatesPromise,
-        ...updateArr.map(item => {
-          item.key = item.key.toString()
-          return macroMetaFetch("update-word", item)
-        })
-      ])
-
+      
       return {
         statusCode: 200,
         headers: {
@@ -73,7 +63,7 @@ async function handler(event) {
 
   } catch (error) {
 
-    console.log("Error", JSON.stringify(error))
+    console.log("Error", error)
 
     return {
       statusCode: error.httpStatusCode || 500,
