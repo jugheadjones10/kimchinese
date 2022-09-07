@@ -7,58 +7,74 @@ permalink:
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
-    <title>Big</title>
-    <link href="big.css" rel="stylesheet" type="text/css" />
+    <title>Kimchinese</title>
+    <link href="index.css" rel="stylesheet" type="text/css" />
     <!-- Is the below loading strategy correct? -->
     <script>
-      const { words, functionEndpoint, userdata } = JSON.parse('{{ get-data | json }}')
-      console.log("Build data", JSON.stringify(words))
-
+        // Below line yielded a kind of obscure bug - if my get-data contained a string using words like "couldn't", then the
+        // JS string would get terminated early and result in a syntax error. The solution was to escape single quotes in the json
+        // filter.
+        const { words, backendEndpoint, iana, error } = JSON.parse('{{ get-data | json }}')
+        console.log("Build data", JSON.stringify(words))
+        console.log("ERROR",error)
     </script>
 
-    <script type="module" src="sentry.js"></script>
-    <script type="module" src="big.js"></script>
+    <!-- Remember to look at Chrome devtools to observe the loading performance and logic and optimize as needed. -->
+    <!-- Base logic -->
+    <script type="module" src="/js/index.js"></script>
+    <!-- Handle slide animations that run on mode change (screen width changes) -->
+    <script type="module" src="/js/mode-change.js"></script>
+    <!-- Handle all menu stuff -->  
+    <script type="module" src="/js/menu.js"></script>
   </head>
   <body>
-
+    {% if get-data.error %}
+    <div class="error-screen">
+      <div>
+      An error occurred while fetching your words! Try refreshing the page or restarting your machine or taking a little walk...
+      </div>
+    </div>
+    {% endif %}
+    
     {% if get-data.words.length > 0 %}
     <div class="menu">&#xFE19;</div>
+
     <div class="overlay">
-      <div class="end-session hover"><div>End Session</div></div>
+      <div class="end-session"><div class="end-session__text">End Session</div></div>
     </div>
     <div class="counter"></div>
-    {% endif %}
+   {% endif %}
 
-    <div class="pc">
+   <div class="spinner"></div>
+
+    <div class="parent-container">
       {% for row in get-data.words %}
 
       {% if row.type == "coverType" %}
 
       <div class="slide-container">
-        <div class="slide" 
-             data-slide-type="{{ row.type }}" 
-             data-efactor="{{ row.efactor }}" 
-             data-interval="{{ row.interval }}" 
-             data-repetition="{{ row.repetition }}" 
-             data-key="{{ row._key }}"
-             data-word="{{ row.word }}">
+        <div class="slide"> 
           <div class="slide__wrapper"> 
             <div class="slide__front">
-              <div class="slide__word-container">
+              <div class="slide__content--word">
                 {{ row.word }}
               </div>
             </div>
             <div class="slide__back">
-              <div>{{ row.pinyin }}</div>
+              <div>
+                {{ row.pinyin }}
+              </div>
               <br/>
-              <div class="back-heading">Definition</div>
+              <div>Definitions</div>
               <ul>
-                {% for englishDef in row.englishDefs %}
+                {% for englishDef in row.englishDefinitions %}
                 <li>{{ englishDef }}</li>
                 {% endfor %}
-                <li>{{ row.chineseDef }}</li>
+                {% for chineseDef in row.chineseDefinitions %}
+                <li>{{ chineseDef }}</li>
+                {% endfor %}
               </ul>
-              <div class="back-heading">Examples</div>
+              <div>Examples</div>
               <ul>
                 {% for example in row.examples %}
                 <li>{{ example }}</li>
@@ -76,32 +92,32 @@ permalink:
       {% elsif row.type == "defType" %}
 
       <div class="slide-container">
-        <div class="slide" 
-             data-slide-type="{{ row.type }}" 
-             data-efactor="{{ row.efactor }}" 
-             data-interval="{{ row.interval }}" 
-             data-repetition="{{ row.repetition }}" 
-             data-key="{{ row._key }}"
-             data-word="{{ row.word }}">
+        <div class="slide">
           <div class="slide__wrapper"> 
             <!-- <div class="slide__front slide__front--sentence"> -->
             <div class="slide__front">
-              <div class="slide__sentences-container">
-                {% for englishDef in row.englishDefs %}
-                <div class="slide__sentence">{{ englishDef }}</div>
-                {% endfor %}
+              <div class="slide__content--sentences">
+                {% if row.englishDefinitions.length == 1 %}
+                  <div class="slide__sentence">{{ row.englishDefinitions[0] }}</div>
+                {% else %}
+                  {% for englishDef in row.englishDefinitions %}
+                  <li class="slide__sentence">{{ englishDef }}</li>
+                  {% endfor %}
+                {% endif %}
               </div>
             </div>
             <div class="slide__back">
               <div>{{ row.pinyin }}</div>
-              <div class="back-word-answer"><span>{{ row.word }}</span></div>
+              <div class="slide__word-answer"><span>{{ row.word }}</span></div>
               <br/>
-              <div class="back-heading">Definition</div>
+              <div>Definitions</div>
               <ul>
-                <li>{{ row.chineseDef }}</li>
+                {% for chineseDef in row.chineseDefinitions %}
+                <li>{{ chineseDef }}</li>
+                {% endfor %}
               </ul>
               <br/>
-              <div class="back-heading">Examples</div>
+              <div>Examples</div>
               <ul>
                 {% for example in row.examples %}
                 <li>{{ example }}</li>
@@ -119,28 +135,24 @@ permalink:
         {% else %}
 
         <div class="slide-container">
-          <div class="slide" 
-               data-slide-type="{{ row.type }}" 
-               data-efactor="{{ row.efactor }}" 
-               data-interval="{{ row.interval }}" 
-               data-repetition="{{ row.repetition }}" 
-               data-key="{{ row._key }}"
-               data-word="{{ row.word }}">
+          <div class="slide">
             <div class="slide__wrapper"> 
               <div class="slide__front">
-                <div class="slide__sentences-container">
+                <div class="slide__content--sentences">
                   {{ row.frontExample }}
                 </div>
               </div>
               <div class="slide__back">
                 <div>{{ row.pinyin }}</div>
                 <br/>
-                <div class="back-heading">Definition</div>
+                <div>Definitions</div>
                 <ul>
-                  {% for englishDef in row.englishDefs %}
-                  <li>{{ englishDef }}</li>
+                  {% for englishDef in row.englishDefinitions %}
+                    <li>{{ englishDef }}</li>
                   {% endfor %}
-                  <li>{{ row.chineseDef }}</li>
+                  {% for chineseDef in row.chineseDefinitions %}
+                    <li>{{ chineseDef }}</li>
+                  {% endfor %}
                 </ul>
               </div>
             </div>

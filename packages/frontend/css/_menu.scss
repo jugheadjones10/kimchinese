@@ -1,0 +1,76 @@
+@use "base";
+
+.menu {
+  z-index: 2;
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  font-size: 35px;
+}
+
+.overlay {
+  z-index: 1;
+  position: fixed;
+  display: none; /* Hidden by default */
+  width: 100%; /* Full width (cover the whole page) */
+  height: 100%; /* Full height (cover the whole page) */
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.8); /* Black background with opacity */
+  justify-content: center;
+  align-items: center;
+}
+
+.end-session {
+  @include base.flex-center;
+  font-size: base.$middle-font;
+  border: solid white;
+  width: fit-content;
+  overflow: hidden;
+  position: relative;
+  color: white;
+
+  &__text {
+    margin: 5px;
+  }
+
+  &:hover {
+    background: white;
+    color: black;
+  }
+
+  &::after {
+    position: absolute;
+    content: "";
+    height: 100%;
+    width: 100%;
+    animation: raceBy 0.6s ease-in-out infinite;
+    transform: translateX(-100%);
+    background-color: white;
+    z-index: -1;
+    animation-play-state: paused;
+  }
+
+  &--playing {
+    color: black;
+
+    &:hover {
+      background: none;
+    }
+
+    &::after {
+      animation-play-state: running;
+    }
+  }
+}
+
+@keyframes raceBy {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}

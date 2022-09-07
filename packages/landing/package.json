@@ -1,0 +1,25 @@
+{
+  "name": "@kimchinese/landing",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "eleventy --serve & tailwindcss -i input.css -o output.css --watch",
+    "build": "eleventy",
+    "dev": "netlify dev --functionsPort 8888 --port 8085 --targetPort 8081"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@11ty/eleventy": "^2.0.0-canary.8",
+    "@tailwindcss/typography": "^0.5.2",
+    "tailwindcss": "^3.0.24"
+  },
+  "dependencies": {
+    "@kimchinese/shared": "*",
+    "esbuild": "^0.14.39",
+    "node-fetch": "^2.6.7",
+    "yup": "^0.32.11"
+  }
+}

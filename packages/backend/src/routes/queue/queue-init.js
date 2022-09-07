@@ -1,14 +1,12 @@
 const { Worker, Queue, QueueScheduler } = require("bullmq")
 
 const config =  require("#root/bull-config")
-// const jobProcessor = require("./job-processor")
 
 const sgMail = require("@sendgrid/mail");
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 const { DateTime } = require("luxon")
 
-// const { queue } = require("./queue-init")
 const macroMetaFetch = require("#db/macrometa-fetch")
 
 const scheduler = new QueueScheduler(config.queueName, {
@@ -20,7 +18,7 @@ const queue = new Queue(config.queueName, {
   defaultJobOptions: {
     attempts: 3,
     backoff: { type: "exponential", delay: 3000 }
-  }
+ }
 })
 
 const worker = new Worker(config.queueName, jobProcessor, {
@@ -45,17 +43,18 @@ exports.onWorkerFailed = function(job, err){
 }
 
 exports.jobProcessorInner = async function(job){
-  console.log("FUCK")
-  const { scheduledDate, to, html, username } = job.data
+  const { scheduledDate, IANA, username, notif, notifChannels } = job.data
 
   // Enqueue new job for start of next day
-  const nextDay = DateTime.fromISO(scheduledDate).plus({ days: 1 }).startOf("day").toUTC().toISO()
-  const queueNextDay = queue.add("send email", {
-    to,
-    html,
+  // Need to use user's timezone in order to find out what time the start of his tomorrow is. 
+  const nextDay = DateTime.fromISO(scheduledDate).local({ zone: IANA }).plus({ days: 1 }).startOf("day").toUTC().toISO()
+  const queueNextDay = queue.add("send notif", {
     scheduledDate: nextDay,
-    username
-  }, 
+    IANA,
+    username,
+    notif,
+    notifChannels
+  },
   {
     jobId: username + nextDay,
     delay: DateTime.fromISO(nextDay).diffNow().toMillis() 
@@ -68,16 +67,21 @@ exports.jobProcessorInner = async function(job){
   }).then(([{ words }]) => {
     console.log("IN WORDS", words)
     if(words.length > 0){
-      const msg = {
-        to,
-        from: "app@kimchinese.com", // Change to your verified sender
-        subject: "Here's your flashcards review link!",
-        html
+
+      // Notification logic
+      const sendNotifObj = {
+        [notif]: notifChannels[notif],
+        username,
+        scheduledDate
       }
-      return sgMail.send(msg)
+
+      if(notif === "email"){
+        return sendEmail(sendNotifObj) 
+      }else if(notif === "sms"){
+        return sendSMS(sendNotifObj)
+      }
+
     }
-  }).then(response => {
-      if(response && response[0].statusCode !== 202) throw "Wrong email response: " + response
   })
 
   await Promise.all([queueNextDay, checkWordsAndSend])

@@ -1,0 +1,77 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id          Int         @id @default(autoincrement())
+  username    String      @unique
+  email       String?
+  sms         String?
+  contactType ContactType
+  iana        Iana        @relation(fields: [ianaId], references: [id])
+  ianaId      Int
+  userWords   UserWord[]
+}
+
+model Iana {
+  id       Int    @id @default(autoincrement())
+  timezone String @unique
+  users    User[]
+}
+
+enum ContactType {
+  SMS
+  EMAIL
+}
+
+model UserWord {
+  id         Int      @id @default(autoincrement())
+  user       User     @relation(fields: [userId], references: [id])
+  userId     Int
+  word       Word     @relation(fields: [wordId], references: [id])
+  wordId     Int
+  repetition Int
+  interval   Int
+ efactor    Float
+  dueDate    DateTime
+  
+  @@index([userId, dueDate(sort: "Asc")])
+}
+
+model Word {
+  id                 Int                 @id @default(autoincrement())
+  word               String              @unique
+  pinyin             String
+  pronounceUrl        String
+  userWords          UserWord[]
+  examples           Example[]
+  englishDefinitions EnglishDefinition[]
+  chineseDefinitions ChineseDefinition[]
+
+  @@index([word])
+}
+
+model Example {
+  id      Int    @id @default(autoincrement())
+  words   Word[]
+  example String
+}
+
+model EnglishDefinition {
+  id         Int    @id @default(autoincrement())
+  word       Word   @relation(fields: [wordId], references: [id])
+  wordId     Int
+  definition String
+}
+
+model ChineseDefinition {
+  id         Int    @id @default(autoincrement())
+  word       Word   @relation(fields: [wordId], references: [id])
+  wordId     Int
+  definition String
+}

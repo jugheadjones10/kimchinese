@@ -1,0 +1,38 @@
+$middle-font: 30px;
+$mode-change-breakpoint: 768px;
+$animation-length: 0.2s;
+
+html {
+  height: 100%;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, Tahoma, Verdana, Cambria,
+    "Microsoft YaHei", 微软雅黑, SimHei;
+  font-weight: 700;
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+}
+
+h1,
+h2,
+h3,
+p {
+  margin: 0;
+}
+
+em {
+  font-style: normal;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+@mixin flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

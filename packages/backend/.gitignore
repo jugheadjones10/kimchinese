@@ -1,4 +1,6 @@
 *.env
+.env.test
+.env.dev
 node_modules
 logs
 package-lock.json

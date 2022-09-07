@@ -1,7 +1,7 @@
 const fetch = require("node-fetch")
 const macroMetaFetch = require("./macrometa-fetch")
 
-module.exports = async function createUser({userReqWords, username, isoTime, IANA, email, query = "insert-user"}) {
+module.exports = async function createUser({userReqWords, username, isoTime, IANA, notif, notifChannels, query = "insert-user"}) {
 
 	const words = userReqWords.map(word => {
 		return {
@@ -17,7 +17,8 @@ module.exports = async function createUser({userReqWords, username, isoTime, IAN
 			username,
 			words,
 			IANA,
-			email
+			notif,
+			notifChannels
 	}
 
 	const result = await macroMetaFetch(query, body)

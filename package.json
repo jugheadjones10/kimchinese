@@ -4,16 +4,37 @@
   "description": "",
   "workspaces": [
     "packages/frontend",
-    "packages/backend"
+    "packages/backend",
+    "packages/landing",
+    "packages/shared"
   ],
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "backend": "npm run dev --workspace=packages/backend",
+    "backend": "npm start --workspace=packages/backend",
     "frontend": "npm run dev netlify-start --workspace=packages/frontend",
     "start-backend": "npm start --workspace=packages/backend",
     "start": "concurrently 'npm run backend' 'npm run frontend'"
   },
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "eslint": "^8.22.0",
+    "eslint-config-prettier": "^8.5.0",
+    "patch-package": "^6.4.7",
+    "prettier": "^2.7.1"
+  },
+  "eslintConfig": {
+    "extends": [
+      "eslint:recommended",
+      "prettier"
+    ],
+    "env": {
+      "node": true,
+      "es2022": true
+    }
+  },
+  "prettier": {
+    "semi": false
+  }
 }

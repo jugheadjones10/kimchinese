@@ -19,8 +19,9 @@ router.post('/', async (req, res) => {
   `)
 
   //Date and username are added to display in bullboard
+  //Delay should be calculated with Luxon's utc and the user's IANA info.
   await queue.add("send email", {
-    to: email,
+   to: email,
     html: `<a href="www.example.com">Here's your link</a>`,
     scheduledDate,
     username

@@ -85,7 +85,7 @@ module.exports = {
     "#db/(.*)": "<rootDir>/src/db/$1",
     "#routes/(.*)": "<rootDir>/src/routes/$1",
     "#src/(.*)": "<rootDir>/src/$1",
-    "#root/(.*)": "<rootDir>/$1"
+    "#root/(.*)": "<rootDir>/$1",
   },
 
   // An array of regexp pattern strings, matched against all module paths before considered 'visible' to the module loader
@@ -198,5 +198,5 @@ module.exports = {
   // Whether to use watchman for file crawling
   // watchman: true,
 
-  testTimeout: 10000
-};
+  testTimeout: 10000,
+}
