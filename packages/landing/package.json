@@ -5,7 +5,7 @@
   "scripts": {
     "build": "run-s build:tailwind build:parcel build:eleventy",
     "build:eleventy": "eleventy",
-    "build:parcel": "parcel watch index.js",
+    "build:parcel": "parcel index.js",
     "build:tailwind": "tailwindcss -i input.css -o output.css",
     "dev": "run-p dev:*",
     "dev:eleventy": "eleventy --serve",
