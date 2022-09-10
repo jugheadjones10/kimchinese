@@ -3,21 +3,11 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "build": "npm-run-all build:*",
-    "build:eleventy": "eleventy",
-    "build:parcel": "parcel build index.js",
+    "build": "eleventy",
     "dev": "npm-run-all --parallel dev:*",
     "dev:eleventy": "eleventy --serve",
     "dev:parcel": "parcel watch index.js",
     "dev:tailwind": "tailwindcss -i input.css -o output.css --watch"
-  },
-  "alias": {
-    "process": {
-        "global": "{}"
-    }
-  },
-   "engines": {
-    "node": "18.7.0"
   },
   "author": "",
   "license": "ISC",
