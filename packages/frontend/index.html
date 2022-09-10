@@ -2,21 +2,27 @@
 permalink:
   onrequest: /
 ---
+
 <!DOCTYPE html>
 <html>
   <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"
+    />
     <title>Kimchinese</title>
     <link href="index.css" rel="stylesheet" type="text/css" />
     <!-- Is the below loading strategy correct? -->
     <script>
-        // Below line yielded a kind of obscure bug - if my get-data contained a string using words like "couldn't", then the
-        // JS string would get terminated early and result in a syntax error. The solution was to escape single quotes in the json
-        // filter.
-        const { words, backendEndpoint, iana, error } = JSON.parse('{{ get-data | json }}')
-        console.log("Build data", JSON.stringify(words))
-        console.log("ERROR",error)
+      // Below line yielded a kind of obscure bug - if my get-data contained a string using words like "couldn't", then the
+      // JS string would get terminated early and result in a syntax error. The solution was to escape single quotes in the json
+      // filter.
+      const { words, backendEndpoint, iana, error } = JSON.parse(
+          '{{ get-data | json }}'
+      )
+      console.log("Build data", JSON.stringify(words))
+      console.log("ERROR", error)
     </script>
 
     <!-- Remember to look at Chrome devtools to observe the loading performance and logic and optimize as needed. -->
@@ -24,53 +30,47 @@ permalink:
     <script type="module" src="/js/index.js"></script>
     <!-- Handle slide animations that run on mode change (screen width changes) -->
     <script type="module" src="/js/mode-change.js"></script>
-    <!-- Handle all menu stuff -->  
+    <!-- Handle all menu stuff -->
     <script type="module" src="/js/menu.js"></script>
   </head>
   <body>
     {% if get-data.error %}
     <div class="error-screen">
       <div>
-      An error occurred while fetching your words! Try refreshing the page or restarting your machine or taking a little walk...
+        An error occurred while fetching your words! Try refreshing the page or
+        restarting your machine or taking a little walk...
       </div>
     </div>
-    {% endif %}
-    
-    {% if get-data.words.length > 0 %}
+    {% endif %} {% if get-data.words.length > 0 %}
     <div class="menu">&#xFE19;</div>
 
     <div class="overlay">
-      <div class="end-session"><div class="end-session__text">End Session</div></div>
+      <div class="end-session">
+        <div class="end-session__text">End Session</div>
+      </div>
     </div>
     <div class="counter"></div>
-   {% endif %}
+    {% endif %}
 
-   <div class="spinner"></div>
+    <div class="spinner"></div>
 
     <div class="parent-container">
-      {% for row in get-data.words %}
-
-      {% if row.type == "coverType" %}
+      {% for row in get-data.words %} {% if row.type == "coverType" %}
 
       <div class="slide-container">
-        <div class="slide"> 
-          <div class="slide__wrapper"> 
+        <div class="slide">
+          <div class="slide__wrapper">
             <div class="slide__front">
-              <div class="slide__content--word">
-                {{ row.word }}
-              </div>
+              <div class="slide__content--word">{{ row.word }}</div>
             </div>
             <div class="slide__back">
-              <div>
-                {{ row.pinyin }}
-              </div>
-              <br/>
+              <div>{{ row.pinyin }}</div>
+              <br />
               <div>Definitions</div>
               <ul>
                 {% for englishDef in row.englishDefinitions %}
                 <li>{{ englishDef }}</li>
-                {% endfor %}
-                {% for chineseDef in row.chineseDefinitions %}
+                {% endfor %} {% for chineseDef in row.chineseDefinitions %}
                 <li>{{ chineseDef }}</li>
                 {% endfor %}
               </ul>
@@ -93,30 +93,30 @@ permalink:
 
       <div class="slide-container">
         <div class="slide">
-          <div class="slide__wrapper"> 
+          <div class="slide__wrapper">
             <!-- <div class="slide__front slide__front--sentence"> -->
             <div class="slide__front">
               <div class="slide__content--sentences">
                 {% if row.englishDefinitions.length == 1 %}
-                  <div class="slide__sentence">{{ row.englishDefinitions[0] }}</div>
-                {% else %}
-                  {% for englishDef in row.englishDefinitions %}
-                  <li class="slide__sentence">{{ englishDef }}</li>
-                  {% endfor %}
-                {% endif %}
+                <div class="slide__sentence">
+                  {{ row.englishDefinitions[0] }}
+                </div>
+                {% else %} {% for englishDef in row.englishDefinitions %}
+                <li class="slide__sentence">{{ englishDef }}</li>
+                {% endfor %} {% endif %}
               </div>
             </div>
             <div class="slide__back">
               <div>{{ row.pinyin }}</div>
               <div class="slide__word-answer"><span>{{ row.word }}</span></div>
-              <br/>
+              <br />
               <div>Definitions</div>
               <ul>
                 {% for chineseDef in row.chineseDefinitions %}
                 <li>{{ chineseDef }}</li>
                 {% endfor %}
               </ul>
-              <br/>
+              <br />
               <div>Examples</div>
               <ul>
                 {% for example in row.examples %}
@@ -124,64 +124,56 @@ permalink:
                 {% endfor %}
               </ul>
             </div>
-            </div>
-            <div class="slide__rating-row">
-              <div class="slide__no-got-it">Didn't got it</div>
-              <div class="slide__got-it">Got it</div>
-            </div>
           </div>
-        </div>
-
-        {% else %}
-
-        <div class="slide-container">
-          <div class="slide">
-            <div class="slide__wrapper"> 
-              <div class="slide__front">
-                <div class="slide__content--sentences">
-                  {{ row.frontExample }}
-                </div>
-              </div>
-              <div class="slide__back">
-                <div>{{ row.pinyin }}</div>
-                <br/>
-                <div>Definitions</div>
-                <ul>
-                  {% for englishDef in row.englishDefinitions %}
-                    <li>{{ englishDef }}</li>
-                  {% endfor %}
-                  {% for chineseDef in row.chineseDefinitions %}
-                    <li>{{ chineseDef }}</li>
-                  {% endfor %}
-                </ul>
-              </div>
-            </div>
-            <div class="slide__rating-row">
-              <div class="slide__no-got-it">Didn't got it</div>
-              <div class="slide__got-it">Got it</div>
-            </div>
-          </div>
-        </div>
-
-        {% endif %}
-
-        {% endfor %}
-
-        <div class="slide-container">
-          <div class="slide">
-            <div class="last-slide">
-              <div>
-                {% if get-data.words.length > 0 %}
-                Session Finished
-                {% else %}
-                No words to review. Take a break ;)
-                {% endif %}
-              </div>
-            </div>
+          <div class="slide__rating-row">
+            <div class="slide__no-got-it">Didn't got it</div>
+            <div class="slide__got-it">Got it</div>
           </div>
         </div>
       </div>
 
-  </body>
+      {% else %}
 
+      <div class="slide-container">
+        <div class="slide">
+          <div class="slide__wrapper">
+            <div class="slide__front">
+              <div class="slide__content--sentences">
+                {{ row.frontExample }}
+              </div>
+            </div>
+            <div class="slide__back">
+              <div>{{ row.pinyin }}</div>
+              <br />
+              <div>Definitions</div>
+              <ul>
+                {% for englishDef in row.englishDefinitions %}
+                <li>{{ englishDef }}</li>
+                {% endfor %} {% for chineseDef in row.chineseDefinitions %}
+                <li>{{ chineseDef }}</li>
+                {% endfor %}
+              </ul>
+            </div>
+          </div>
+          <div class="slide__rating-row">
+            <div class="slide__no-got-it">Didn't got it</div>
+            <div class="slide__got-it">Got it</div>
+          </div>
+        </div>
+      </div>
+
+      {% endif %} {% endfor %}
+
+      <div class="slide-container">
+        <div class="slide">
+          <div class="last-slide">
+            <div>
+              {% if get-data.words.length > 0 %} Session Finished {% else %} No
+              words to review. Take a break ;) {% endif %}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
 </html>

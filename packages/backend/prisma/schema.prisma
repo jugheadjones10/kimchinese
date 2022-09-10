@@ -37,7 +37,7 @@ model UserWord {
   wordId     Int
   repetition Int
   interval   Int
- efactor    Float
+  efactor    Float
   dueDate    DateTime
   
   @@index([userId, dueDate(sort: "Asc")])

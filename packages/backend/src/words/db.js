@@ -24,5 +24,3 @@ exports.getDueWordsFromDB = function getDueWordsFromDB(username, currentTime) {
     },
   })
 }
-
-exports.checkIf

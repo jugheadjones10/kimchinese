@@ -4,6 +4,7 @@ const logger = require("#src/logging")
 const crawlWords = require("./crawl-words.cjs").default
 const Dataset = require("../../tests/crawlee-dataset.cjs").default
 const util = require("util")
+const Joi = require("joi")
 
 var cedict = JSON.parse(
   fs.readFileSync(
@@ -19,13 +20,58 @@ for (let word of cedict) {
   }
 }
 
+const wordSchema = Joi.object({
+  word: Joi.string().required(),
+  examples: Joi.array().items(Joi.string()).min(1),
+  chineseDefinitions: Joi.array().items(Joi.string()).min(1),
+  englishDefinitions: Joi.array().items(Joi.string()).min(1),
+  pinyin: Joi.string().required(),
+  pronounceUrl: Joi.string(),
+})
+
 async function scrapeAndReduceWords(words) {
-  await crawlWords(words)
+  console.log("ScrapeAndreduceWords", words)
+
+  // This is necessary because Crawlee returns everything in its storage, even data from past runs, when using Dataset.open().
+  // Somewhere in the docs it says that a purge only occurs once during a session? So I guess I need to do it manually.
   const dataset = await Dataset.open()
-  return reduceScrapedWords(dataset)
+  await dataset.drop()
+  await crawlWords(words)
+
+  return reduceScrapedWords()
+    .then((scrapedWords) => {
+      // Need to drop the dataset here because otherwise dataset.reduce will return ALL words that have been scraped before
+      // even though we only want the ones that have been newly scraped.
+      console.log("Scraped words here", scrapedWords)
+
+      return scrapedWords
+    })
+    .then((scrapedWords) => {
+      console.log("The scraepd words", scrapedWords)
+      //For some reason Crawlee doesn't process scrapes that have been performed before, even though the Dataset was dropped
+      const incompleteWords = []
+
+      for (const [key, value] of Object.entries(scrapedWords)) {
+        const { error, _ } = wordSchema.validate(value)
+        if (error) {
+          incompleteWords.push(key)
+          delete scrapedWords[key]
+        }
+      }
+      console.log("Incomplete words in scrape and reduce", incompleteWords)
+      logger.warn(
+        "Incomplete words array in scrape-and-reduce:" + incompleteWords
+      )
+
+      return {
+        scrapedWords,
+        incompleteWords,
+      }
+    })
 }
 
-async function reduceScrapedWords(dataset) {
+async function reduceScrapedWords() {
+  const dataset = await Dataset.open()
   const wordResults = dataset.reduce((memo, value) => {
     memo[value.word] = {
       ...memo[value.word],

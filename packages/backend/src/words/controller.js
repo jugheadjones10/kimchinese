@@ -53,7 +53,7 @@ exports.updateWords = async function updateWords(req, res, next) {
         data: {
           repetition: value.repetition,
           interval: value.interval,
-          efactor: value.evalue,
+          efactor: value.efactor,
           dueDate: DateTime.fromISO(value.dueDate).toJSDate(),
         },
       })

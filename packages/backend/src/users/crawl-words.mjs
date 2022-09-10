@@ -1,11 +1,37 @@
 import util from "util"
-import { Dataset, PlaywrightCrawler, Request } from "crawlee"
+import {
+  Dataset,
+  PlaywrightCrawler,
+  Request,
+  RequestList,
+  purgeDefaultStorages,
+} from "crawlee"
 import logger from "#src/logging"
 export const definitionsPage = "definition"
 export const examplesPage = "example"
 
+const playwrightTimeout = 2000
 export default async function crawlWords(words) {
+  // This doesn't seem to work
+  // await purgeDefaultStorages()
+  const requestObjects = []
+  for (let i = 0; i < words.length; i++) {
+    logger.info("Crawler loop word" + words[i])
+    const word = words[i]
+    requestObjects.push({
+      url: "https://hanyu.baidu.com/zici/s?wd=" + word,
+      userData: { pageType: definitionsPage, word },
+    })
+
+    requestObjects.push({
+      url: "https://hanyu.baidu.com/s?wd=" + word + "造句",
+      userData: { pageType: examplesPage, word },
+    })
+  }
+  const requestList = await RequestList.open(null, requestObjects)
+
   const crawler = new PlaywrightCrawler({
+    requestList,
     launchContext: {
       launchOptions: {
         headless: true,
@@ -16,35 +42,74 @@ export default async function crawlWords(words) {
 
       if (request.userData.pageType === definitionsPage) {
         // Visibility is required because there's a hidden html section showing "detailed" definitions for single-character words
-        const chineseDefinitions = (
-          await page.locator("dd p:visible").allTextContents()
-        ).map((def) => def.trim())
-
+        const chineseDefinitionsPromise = page
+          .locator("dd p:visible")
+          .allTextContents({ timeout: playwrightTimeout })
+          .then((textContents) => {
+            return textContents.map((def) => def.trim())
+          })
         // The html for single-character results and multi-character results are slightly different for pinyin.
-        var pinyin = await page.locator("#pinyin b").textContent()
-        if (pinyin[0] === "[") pinyin = pinyin.slice(1, -1).trim()
+        var pinyinPromise = page
+          .locator("#pinyin span > b")
+          .textContent({ timeout: playwrightTimeout })
+          .then((pinyin) => {
+            if (pinyin[0] === "[") return pinyin.slice(1, -1).trim()
+            return pinyin
+          })
 
-        const pronounceUrl = await page.locator(".mp3-play").getAttribute("url")
+        const pronounceUrlPromise = page
+          .locator(".mp3-play")
+          .getAttribute("url", { timeout: playwrightTimeout })
 
-        const results = {
-          word: request.userData.word,
-          chineseDefinitions,
-          pinyin,
-          pronounceUrl,
+        const getDataPromise = Promise.all([
+          chineseDefinitionsPromise,
+          pinyinPromise,
+          pronounceUrlPromise,
+        ])
+
+        try {
+          const [chineseDefinitions, pinyin, pronounceUrl] =
+            await getDataPromise
+          const results = {
+            word: request.userData.word,
+            chineseDefinitions,
+            pinyin,
+            pronounceUrl,
+          }
+          log.info(util.inspect(results))
+          await Dataset.pushData(results)
+        } catch (e) {
+          log.warning(
+            "Could not find page elements for word: " + request.userData.word
+          )
+          await Dataset.pushData({
+            word: request.userData.word,
+          })
         }
-        log.info(util.inspect(results))
-        await Dataset.pushData(results)
       } else if (request.userData.pageType === examplesPage) {
-        const examples = (
-          await page.locator(".zaoju-item .content").allTextContents()
-        ).map((eg) => eg.trim())
+        const examplesPromise = page
+          .locator(".zaoju-item .content")
+          .allTextContents({ timeout: playwrightTimeout })
+          .then((textContents) => {
+            return textContents.map((eg) => eg.trim())
+          })
 
-        const results = {
-          word: request.userData.word,
-          examples,
+        try {
+          const examples = await examplesPromise
+          const results = {
+            word: request.userData.word,
+            examples,
+          }
+          log.info(util.inspect(results))
+          await Dataset.pushData(results)
+        } catch (e) {
+          log.warning(
+            "Could not find examples for word: " + request.userData.word
+          )
+          await Dataset.pushData({
+            word: request.userData.word,
+          })
         }
-        log.info(util.inspect(results))
-        await Dataset.pushData(results)
       }
 
       log.info(`${request.url} is the last page!`)
@@ -56,26 +121,8 @@ export default async function crawlWords(words) {
     },
   })
 
-  const requestsList = []
-  for (let i = 0; i < words.length; i++) {
-    logger.info("Crawler loop word" + words[i])
-    const word = words[i]
-    requestsList.push(
-      new Request({
-        url: "https://hanyu.baidu.com/zici/s?wd=" + word,
-        userData: { pageType: definitionsPage, word },
-      })
-    )
+  // await crawler.addRequests(requestsList)
 
-    requestsList.push(
-      new Request({
-        url: "https://hanyu.baidu.com/s?wd=" + word + "造句",
-        userData: { pageType: examplesPage, word },
-      })
-    )
-  }
-
-  await crawler.addRequests(requestsList)
   // Run the crawler and wait for it to finish.
   await crawler.run()
 

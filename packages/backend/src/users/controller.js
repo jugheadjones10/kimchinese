@@ -4,6 +4,8 @@ const formSchema = require("./form-schema")
 const prisma = require("../db-init")
 const { validationStrings } = require("@kimchinese/shared")
 const { createUserInDB } = require("./db")
+const { queueNotif } = require("#queue/index")
+const { DateTime } = require("luxon")
 
 // Form handling
 const readXlsxFile = require("read-excel-file/node")
@@ -14,15 +16,18 @@ exports.getUser = getUser
 
 async function getUser(req, res, next) {
   const username = req.params.username
-  logger.info(`Request for ${username} has come in`)
-  const result = await prisma.user.findUnique({
-    where: {
-      username,
-    },
-    include: {
-      iana: true,
-    },
-  })
+  logger.info(`Request for ${username}`)
+  let result = null
+  if (username) {
+    result = await prisma.user.findUnique({
+      where: {
+        username,
+      },
+      include: {
+        iana: true,
+      },
+    })
+  }
 
   res.status(200).json(result)
 }
@@ -42,7 +47,7 @@ async function createUser(req, res, next) {
     abortEarly: false,
   })
 
-  formError && logger.error(formError)
+  formError && logger.warn(formError)
   if (formError) {
     res.status(403).json(formError)
     return
@@ -54,6 +59,7 @@ async function createUser(req, res, next) {
     },
   })
   if (result) {
+    logger.warn(validationStrings.duplicateUsername)
     res.status(403).json(validationStrings.duplicateUsername)
     return
   }
@@ -69,6 +75,7 @@ async function createUser(req, res, next) {
   logger.info("User words submitted: " + userWords)
 
   if (userWords.length === 0) {
+    logger.warn(validationStrings.emptyFile)
     res.status(403).json(validationStrings.emptyFile)
     return
   }
@@ -77,10 +84,10 @@ async function createUser(req, res, next) {
   //Check for CORS?
   //Please check your network and try again whenever I come back to tab?
   try {
-    const { username, notif, email, sms, isoTime, IANA } = formData
-    const newUser = await createUserInDB({
+    const { username, contactType, email, sms, isoTime, IANA } = formData
+    const [createdUser, incompleteWords] = await createUserInDB({
       username,
-      notif,
+      contactType,
       email,
       sms,
       isoTime,
@@ -88,20 +95,26 @@ async function createUser(req, res, next) {
       userWords,
     })
 
-    // const queueNotifPromise = queueNotif({
-    //   scheduledDate: isoTime,
-    //   IANA,
-    //   username,
-    //   notif,
-    //   notifChannels,
-    // })
+    // Track the lifecycle or your isoTime values from start to finish
+    console.log("SCHEDULEDDATE IN USER CONTROLLER", isoTime)
+    // queueNotif needs to come after user has been completely initialized in the database because
+    // it checks for all words that are due
+    await queueNotif({
+      scheduledDate: isoTime,
+      IANA,
+      username,
+      contactType,
+      notifInfo: formData[contactType.toLowerCase()],
+    })
 
-    // await Promise.all([scrapeAndCreatePromisePool.start(), createUserPromise])
-    // await browser.close()
+    logger.warn(
+      "Incomplete words array in create user controller" + incompleteWords
+    )
+    console.log("Incomplete words controller", incompleteWords)
 
-    res.status(200).end()
+    res.status(200).json({ incompleteWords, createdUser })
   } catch (error) {
-    logger.error("Error handling /hydrate-words POST request: ", error)
+    logger.error("Error creating new user in database", error)
     return next(error)
   }
 }

@@ -45,17 +45,19 @@ module.exports = async function getData(configData) {
         if (type === "examplesType") {
           if (!word.examples) return
           finalWords.push({
-            ...userWord,
-            word: word,
+            // The order is very important here...word and userWord both have an id property. We don't want word's id
+            // to override userWord's id because userWord already has a wordId. This is confusing code. Refactor it.
             ...word,
+            ...userWord,
+            word: word.word,
             type: type,
             frontExample: arrayCopy.pop(),
           })
         } else {
           finalWords.push({
-            ...userWord,
-            word: word,
             ...word,
+            ...userWord,
+            word: word.word,
             type: type,
           })
         }

@@ -11,7 +11,7 @@ let server, app
 const formFields = {
   username: "dan",
   "vocab-source": "excel",
-  notif: "email",
+  contactType: "EMAIL",
   email: "kimyoungjin1001@gmail.com",
   isoTime: DateTime.now().toISO(),
   IANA: "Asia/Seoul",
@@ -23,7 +23,7 @@ beforeAll(async () => {
   app = express()
   // app.use(cors())
   // app.use(express.json())
-  app.use("/api", require("#src/users/router"))
+  app.use("/api", require("#users/router"))
 
   await new Promise((resolve, reject) => {
     server = app.listen(8000, () => {
@@ -34,7 +34,7 @@ beforeAll(async () => {
 })
 
 test("/api/users returns error on wrong form input", (done) => {
-  const modifiedFormFields = { ...formFields, notif: "sms" }
+  const modifiedFormFields = { ...formFields, contactType: "SMS" }
 
   request(app)
     .post("/api/user")
@@ -78,21 +78,21 @@ test("/api/users returns error on empty excel file", (done) => {
     .catch((err) => done(err))
 })
 
-jest.setTimeout(30000)
+// jest.setTimeout(30000)
 // Write full docker-compliant test?
 // Write some integration tests
-test.only("CORRECT", (done) => {
-  request(app)
-    .post("/api/user")
-    .field(formFields)
-    .attach("excel-file", wordsListExcel)
-    .expect(200)
-    .then((response) => {
-      // expect(response.body).toBe(validationStrings.emptyFile)
-      done()
-    })
-    .catch((err) => done(err))
-})
+// test.only("CORRECT", (done) => {
+//   request(app)
+//     .post("/api/user")
+//     .field(formFields)
+//     .attach("excel-file", wordsListExcel)
+//     .expect(200)
+//     .then((response) => {
+//       // expect(response.body).toBe(validationStrings.emptyFile)
+//       done()
+//     })
+//     .catch((err) => done(err))
+// })
 
 afterAll(async () => {
   await new Promise((resolve, reject) => {

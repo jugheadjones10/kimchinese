@@ -14,6 +14,7 @@ var require_shared = __commonJS({
       missingFile: "You need to upload a file",
       invalidFileType: "File type needs to be csv, xls, or xlsx",
       invalidFileInputName: "File input name needs to be excel-file",
+      emptyFile: "Your file is empty",
       missingStarter: "You need to select at least one starter pack",
       invalidEmail: "Please input a valid email",
       missingEmail: "You need to enter your email",

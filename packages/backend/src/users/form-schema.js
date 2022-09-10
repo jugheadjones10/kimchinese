@@ -36,20 +36,20 @@ module.exports = Joi.object({
     .messages({
       "any.required": validationStrings.missingFile,
     }),
-  notif: Joi.string().valid("email", "sms").required().messages({
+  contactType: Joi.string().valid("EMAIL", "SMS").required().messages({
     "any.only": validationStrings.invalidNotifValue,
     "any.required": validationStrings.missingNotif,
   }),
   email: Joi.string()
     .email({ minDomainSegments: 1 })
-    .when("notif", { is: "email", then: Joi.required() })
+    .when("contactType", { is: "EMAIL", then: Joi.required() })
     .messages({
       "string.email": validationStrings.invalidEmail,
       "any.required": validationStrings.missingEmail,
     }),
   sms: Joi.string()
     .pattern(/^\+(?:[0-9] ?){6,14}[0-9]$/)
-    .when("notif", { is: "sms", then: Joi.required() })
+    .when("contactType", { is: "SMS", then: Joi.required() })
     .messages({
       "string.pattern.base": validationStrings.invalidPhone,
       "any.required": validationStrings.missingPhone,

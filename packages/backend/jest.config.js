@@ -82,9 +82,10 @@ module.exports = {
 
   // A map from regular expressions to module names or to arrays of module names that allow to stub out resources with a single module
   moduleNameMapper: {
-    "#db/(.*)": "<rootDir>/src/db/$1",
-    "#routes/(.*)": "<rootDir>/src/routes/$1",
     "#src/(.*)": "<rootDir>/src/$1",
+    "#users/(.*)": "<rootDir>/src/users/$1",
+    "#words/(.*)": "<rootDir>/src/words/$1",
+    "#queue/(.*)": "<rootDir>/src/queue/$1",
     "#root/(.*)": "<rootDir>/$1",
   },
 

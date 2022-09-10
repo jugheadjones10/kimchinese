@@ -68,7 +68,7 @@ function go(n, override = false) {
 }
 
 function batchUpdate() {
-  let tempStore = {}
+  const tempStore = {}
 
   for (let slide of slides.slice(0, slides.length - 1)) {
     let gradeAddition = slide.correct
@@ -82,17 +82,18 @@ function batchUpdate() {
     } else {
       tempStore[slide.word] = {
         ...slide.wordObj,
-        grade: gradeAddition,
         efactor: slide.wordObj.efactor,
         interval: slide.wordObj.interval,
         repetition: slide.wordObj.repetition,
+        grade: gradeAddition,
       }
     }
   }
 
-  for (const [key, value] of Object.entries(tempStore)) {
-    console.log("KEY VALUE PAIRS", key, value)
+  for (let [key, value] of Object.entries(tempStore)) {
+    console.log("TEMPSTORE BEFORE SUPERMEMO", JSON.parse(JSON.stringify(value)))
     supermemo(value, value.grade, iana)
+    console.log("TEMPSTORE AFTER SUPERMEMO", JSON.parse(JSON.stringify(value)))
   }
 
   return fetch(backendEndpoint + "/api/update-words", {

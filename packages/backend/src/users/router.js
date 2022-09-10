@@ -16,6 +16,6 @@ const upload = multer({
 })
 
 router.post("/user", upload.single("excel-file"), createUser)
-router.get("/user/:username", getUser)
+router.get("/user/:username?", getUser)
 
 module.exports = router

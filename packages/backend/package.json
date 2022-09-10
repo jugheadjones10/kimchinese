@@ -13,10 +13,11 @@
     "postinstall": "patch-package"
   },
   "imports": {
-    "#db/*": "./src/db/*.js",
-    "#routes/*": "./src/routes/*.js",
     "#src/*": "./src/*.js",
-    "#root/*": "./*.js"
+    "#root/*": "./*.js",
+    "#queue/*": "./src/queue/*.js",
+    "#users/*": "./src/users/*.js",
+    "#words/*": "./src/words/*.js"
   },
   "prisma": {
     "seed": "node prisma/seed.js"

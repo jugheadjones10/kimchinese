@@ -1,0 +1,15 @@
+DUE WORDS []
+USER {
+  id: 1,
+  username: 'alice',
+  email: 'alice@alice.com',
+  sms: null,
+  contactType: 'EMAIL',
+  ianaId: 1,
+  iana: { id: 1, timezone: 'Asia/Seoul' }
+}
+Processed Words: []
+[11ty] Writing _site/README/index.html from ./README.md (liquid)
+[11ty] Serverless: 4 files bundled to ./netlify/functions/onrequest.
+[11ty] Copied 9 files / Wrote 1 file in 0.17 seconds (v2.0.0-canary.8)
+[11ty] Watching…

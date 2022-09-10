@@ -11,7 +11,6 @@ module.exports = function (eleventyConfig) {
   })
 
   eleventyConfig.addLiquidFilter("json", function (obj) {
-    console.log("RAW OBJECT", obj)
     return JSON.stringify(obj).replace(/'/g, "\\'")
   })
   eleventyConfig.addShortcode("speakerIcon", function () {

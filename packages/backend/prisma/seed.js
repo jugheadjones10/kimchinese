@@ -18,7 +18,7 @@ const { createUserInDB } = proxyquire("../src/users/db", {
 async function main() {
   const alice = await createUserInDB({
     username: "alice",
-    notif: "email",
+    contactType: "EMAIL",
     email: "alice@alice.com",
     isoTime: DateTime.local(2022, 8, 1, { zone: "Asia/Seoul" }).toISODate(),
     IANA: "Asia/Seoul",
