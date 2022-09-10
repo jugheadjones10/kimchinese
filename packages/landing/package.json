@@ -6,12 +6,12 @@
     "build": "npm-run-all build:*",
     "build:eleventy": "eleventy",
     "build:parcel": "parcel build index.js",
-    "build:tailwind": "tailwindcss -i input.css -o output.css",
     "dev": "npm-run-all --parallel dev:*",
     "dev:eleventy": "eleventy --serve",
     "dev:parcel": "parcel watch index.js",
     "dev:tailwind": "tailwindcss -i input.css -o output.css --watch"
   },
+  "alias": { "process": false },
   "author": "",
   "license": "ISC",
   "devDependencies": {
