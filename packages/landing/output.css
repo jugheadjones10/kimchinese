@@ -1256,8 +1256,8 @@ Ensure the default browser behavior of the `hidden` attribute.
 @font-face {
   font-family: "midnight";
 
-  src: url("/fonts/blackout_midnight-webfont.woff") format("woff"),
-    url("/fonts/blackout_midnight-webfont.eot") format("embedded-opentype");
+  src: url("./fonts/blackout_midnight-webfont.woff") format("woff"),
+    url("./fonts/blackout_midnight-webfont.eot") format("embedded-opentype");
 
   font-weight: bold;
 
@@ -1269,8 +1269,8 @@ Ensure the default browser behavior of the `hidden` attribute.
 @font-face {
   font-family: "twoam";
 
-  src: url("/fonts/blackout_two_am-webfont.woff") format("woff"),
-    url("/fonts/blackout_two_am-webfont.eot") format("embedded-opentype");
+  src: url("./fonts/blackout_two_am-webfont.woff") format("woff"),
+    url("./fonts/blackout_two_am-webfont.eot") format("embedded-opentype");
 
   font-weight: bold;
 
@@ -1282,9 +1282,9 @@ Ensure the default browser behavior of the `hidden` attribute.
 @font-face {
   font-family: "fira-sans";
 
-  src: url("/fonts/FiraSans-Bold.woff2") format("woff2"),
-    url("/fonts/FiraSans-Bold.woff") format("woff"),
-    url("/fonts/FiraSans-Bold.eot") format("embedded-opentype");
+  src: url("./fonts/FiraSans-Bold.woff2") format("woff2"),
+    url("./fonts/FiraSans-Bold.woff") format("woff"),
+    url("./fonts/FiraSans-Bold.eot") format("embedded-opentype");
 
   font-weight: bold;
 
@@ -1294,9 +1294,9 @@ Ensure the default browser behavior of the `hidden` attribute.
 @font-face {
   font-family: "fira-sans";
 
-  src: url("/fonts/FiraSans-Regular.woff2") format("woff2"),
-    url("/fonts/FiraSans-Regular.woff") format("woff"),
-    url("/fonts/FiraSans-Regular.eot") format("embedded-opentype");
+  src: url("./fonts/FiraSans-Regular.woff2") format("woff2"),
+    url("./fonts/FiraSans-Regular.woff") format("woff"),
+    url("./fonts/FiraSans-Regular.eot") format("embedded-opentype");
 
   font-weight: normal;
 

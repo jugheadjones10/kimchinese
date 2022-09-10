@@ -2,24 +2,32 @@
   "name": "@kimchinese/landing",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
   "scripts": {
-    "start": "eleventy --serve",
-    "build": "eleventy",
-    "dev": "eleventy --serve & tailwindcss -i input.css -o output.css --watch",
-    "netlify-dev": "netlify dev --functionsPort 8888 --port 8085 --targetPort 8081"
+    "build": "npm-run-all build:*",
+    "build:eleventy": "eleventy",
+    "build:parcel": "parcel build index.js",
+    "build:tailwind": "tailwindcss -i input.css -o output.css",
+    "dev": "npm-run-all --parallel dev:*",
+    "dev:eleventy": "eleventy --serve",
+    "dev:parcel": "parcel watch index.js",
+    "dev:tailwind": "tailwindcss -i input.css -o output.css --watch"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "@11ty/eleventy": "^2.0.0-canary.8",
     "@tailwindcss/typography": "^0.5.2",
+    "npm-run-all": "^4.1.5",
+    "parcel": "^2.7.0",
     "tailwindcss": "^3.0.24"
   },
   "dependencies": {
     "@kimchinese/shared": "*",
+    "@sentry/browser": "^7.12.1",
+    "@sentry/tracing": "^7.12.1",
     "dotenv": "^16.0.2",
     "esbuild": "^0.14.39",
+    "luxon": "^3.0.3",
     "node-fetch": "^2.6.7",
     "yup": "^0.32.11"
   }

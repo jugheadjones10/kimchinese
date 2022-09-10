@@ -1,7 +1,10 @@
-import shared from "./build/shared.js"
-import { DateTime } from "https://cdn.skypack.dev/luxon"
-import * as Sentry from "https://esm.run/@sentry/browser"
-import { BrowserTracing } from "https://esm.run/@sentry/tracing"
+import shared from "@kimchinese/shared"
+// import { DateTime } from "https://cdn.skypack.dev/luxon"
+// import * as Sentry from "https://esm.run/@sentry/browser"
+// import { BrowserTracing } from "https://esm.run/@sentry/tracing"
+import { DateTime } from "luxon"
+import * as Sentry from "@sentry/browser"
+import { BrowserTracing } from "@sentry/tracing"
 
 Sentry.init({
   dsn: "https://4f41364704974e929ca693d023130c27@o1042358.ingest.sentry.io/6405535",

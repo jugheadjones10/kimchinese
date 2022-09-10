@@ -28,13 +28,19 @@
       "eslint:recommended",
       "prettier"
     ],
-    "plugins": ["@html-eslint"],
-    "overrides": [ 
-      { 
-        "files": ["*.html"],
+    "plugins": [
+      "@html-eslint"
+    ],
+    "overrides": [
+      {
+        "files": [
+          "*.html"
+        ],
         "parser": "@html-eslint/parser",
-        "extends": ["plugin:@html-eslint/recommended"]
-      } 
+        "extends": [
+          "plugin:@html-eslint/recommended"
+        ]
+      }
     ],
     "env": {
       "node": true,
@@ -47,6 +53,7 @@
   "devDependencies": {
     "@html-eslint/eslint-plugin": "^0.13.2",
     "@html-eslint/parser": "^0.13.2",
-    "eslint": "^8.23.0"
+    "eslint": "^8.23.0",
+    "process": "^0.11.10"
   }
 }
