@@ -1,1 +1,3 @@
-web: npm run start-backend
+backend: npm run backend
+landing: npm run landing
+

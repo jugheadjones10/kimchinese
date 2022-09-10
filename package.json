@@ -19,7 +19,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "eslint": "^8.22.0",
     "eslint-config-prettier": "^8.5.0",
     "patch-package": "^6.4.7",
     "prettier": "^2.7.1"
@@ -29,6 +28,14 @@
       "eslint:recommended",
       "prettier"
     ],
+    "plugins": ["@html-eslint"],
+    "overrides": [ 
+      { 
+        "files": ["*.html"],
+        "parser": "@html-eslint/parser",
+        "extends": ["plugin:@html-eslint/recommended"]
+      } 
+    ],
     "env": {
       "node": true,
       "es2022": true
@@ -36,5 +43,10 @@
   },
   "prettier": {
     "semi": false
+  },
+  "devDependencies": {
+    "@html-eslint/eslint-plugin": "^0.13.2",
+    "@html-eslint/parser": "^0.13.2",
+    "eslint": "^8.23.0"
   }
 }
