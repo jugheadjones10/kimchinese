@@ -3,8 +3,11 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "build": "eleventy",
-    "dev": "npm-run-all --parallel dev:*",
+    "build": "run-s build:tailwind build:parcel build:eleventy",
+    "build:eleventy": "eleventy",
+    "build:parcel": "parcel watch index.js",
+    "build:tailwind": "tailwindcss -i input.css -o output.css",
+    "dev": "run-p dev:*",
     "dev:eleventy": "eleventy --serve",
     "dev:parcel": "parcel watch index.js",
     "dev:tailwind": "tailwindcss -i input.css -o output.css --watch"
@@ -23,9 +26,10 @@
     "esbuild": "^0.14.39",
     "luxon": "^3.0.3",
     "node-fetch": "^2.6.7",
-    "yup": "^0.32.11",
     "npm-run-all": "^4.1.5",
     "parcel": "^2.7.0",
-    "tailwindcss": "^3.0.24"
+    "serve": "^14.0.1",
+    "tailwindcss": "^3.0.24",
+    "yup": "^0.32.11"
   }
 }

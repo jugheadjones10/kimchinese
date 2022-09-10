@@ -1,6 +1,9 @@
 const esbuild = require("esbuild")
 require("dotenv").config()
 module.exports = function (eleventyConfig) {
+  eleventyConfig.addWatchTarget("dist")
+  eleventyConfig.addWatchTarget("output.css")
+
   eleventyConfig.addPassthroughCopy("output.css")
   eleventyConfig.addPassthroughCopy("dist")
   eleventyConfig.addPassthroughCopy("excel-format-example.jpg")
