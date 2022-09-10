@@ -3,25 +3,26 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "build": "run-s build:tailwind build:parcel build:eleventy",
+    "build": "run-s build:tailwind build:rollup build:eleventy",
     "build:eleventy": "eleventy",
-    "build:parcel": "parcel build index.js",
+    "build:rollup": "rollup -c",
     "build:tailwind": "tailwindcss -i input.css -o output.css",
     "dev": "run-p dev:*",
     "dev:eleventy": "eleventy --serve",
-    "dev:parcel": "parcel watch index.js",
+    "dev:rollup": "rollup -c -w",
     "dev:tailwind": "tailwindcss -i input.css -o output.css --watch"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "@11ty/eleventy": "^2.0.0-canary.8",
-    "@tailwindcss/typography": "^0.5.2"
+    "@rollup/plugin-commonjs": "^22.0.2",
+    "@rollup/plugin-node-resolve": "^14.0.1",
+    "@tailwindcss/typography": "^0.5.2",
+    "rollup": "^2.79.0"
   },
   "dependencies": {
     "@kimchinese/shared": "*",
-    "@sentry/browser": "^7.12.1",
-    "@sentry/tracing": "^7.12.1",
     "dotenv": "^16.0.2",
     "esbuild": "^0.14.39",
     "luxon": "^3.0.3",
