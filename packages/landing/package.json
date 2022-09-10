@@ -11,7 +11,11 @@
     "dev:parcel": "parcel watch index.js",
     "dev:tailwind": "tailwindcss -i input.css -o output.css --watch"
   },
-  "alias": { "process": false },
+  "alias": {
+    "process": {
+        "global": "{}"
+    }
+  },
   "author": "",
   "license": "ISC",
   "devDependencies": {
