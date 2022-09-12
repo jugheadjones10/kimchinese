@@ -2,7 +2,6 @@
 .env.test
 .env.dev
 .env
-storage/
 node_modules
 logs
 package-lock.json

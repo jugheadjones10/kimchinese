@@ -34,6 +34,9 @@ async function scrapeAndReduceWords(words) {
 
   // This is necessary because Crawlee returns everything in its storage, even data from past runs, when using Dataset.open().
   // Somewhere in the docs it says that a purge only occurs once during a session? So I guess I need to do it manually.
+
+  // Need to make sure the storage directory has been initialized before trying to open it with Dataset. If not Dataset throws an
+  // error.
   const dataset = await Dataset.open()
   await dataset.drop()
   await crawlWords(words)
