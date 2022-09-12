@@ -5,10 +5,8 @@
   "main": "src/index.js",
   "type": "commonjs",
   "scripts": {
-    "test": "DOTENV_CONFIG_PATH=.env.test NODE_OPTIONS=--experimental-vm-modules jest $npm_config_file --detectOpenHandles --setupFilesAfterEnv=dotenv/config",
-    "start": "DOTENV_CONFIG_PATH=.env.dev node -r dotenv/config 'src/index.js'",
-    "test-courier": "DOTENV_CONFIG_PATH=.env.dev node -r dotenv/config 'src/routes/queue/send-notif.js'",
-    "prisma-migrate": "dotenv -e .env.dev prisma migrate dev --name init",
+    "test": "env-cmd -f .env.test jest $npm_config_file --detectOpenHandles",
+    "start": "node 'src/index.js'",
     "transpile": "babel --out-file tests/crawlee-dataset.cjs tests/crawlee-dataset.mjs --out-file src/users/crawl-words.cjs src/users/crawl-words.mjs --watch",
     "postinstall": "patch-package"
   },

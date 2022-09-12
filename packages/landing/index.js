@@ -1,7 +1,7 @@
-import shared from "@kimchinese/shared"
 // import { DateTime } from "https://cdn.skypack.dev/luxon"
 // import * as Sentry from "https://esm.run/@sentry/browser"
 // import { BrowserTracing } from "https://esm.run/@sentry/tracing"
+import shared from "@kimchinese/shared"
 import { DateTime } from "luxon"
 import * as Sentry from "@sentry/browser"
 import { BrowserTracing } from "@sentry/tracing"
