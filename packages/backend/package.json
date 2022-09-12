@@ -6,6 +6,7 @@
   "type": "commonjs",
   "scripts": {
     "test": "env-cmd -f .env.test jest $npm_config_file --detectOpenHandles",
+    "start": "node 'src/index.js'",
     "dev": "run-p dev:*",
     "dev:babel": "babel --out-file tests/crawlee-dataset.cjs tests/crawlee-dataset.mjs --out-file src/users/crawl-words.cjs src/users/crawl-words.mjs --watch",
     "dev:express": "nodemon 'src/index.js'",
