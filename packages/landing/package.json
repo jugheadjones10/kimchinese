@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "build": "run-s build:tailwind build:rollup build:eleventy",
+    "build": "npm-run-all -s build:tailwind build:rollup build:eleventy",
     "build:eleventy": "eleventy",
     "build:rollup": "rollup -c",
     "build:tailwind": "tailwindcss -i input.css -o output.css",
