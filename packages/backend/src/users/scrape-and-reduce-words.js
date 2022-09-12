@@ -37,8 +37,8 @@ async function scrapeAndReduceWords(words) {
 
   // Need to make sure the storage directory has been initialized before trying to open it with Dataset. If not Dataset throws an
   // error.
-  const dataset = await Dataset.open()
-  await dataset.drop()
+  // const dataset = await Dataset.open()
+  // await dataset.drop()
   await crawlWords(words)
 
   return reduceScrapedWords()
