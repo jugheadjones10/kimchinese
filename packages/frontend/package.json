@@ -25,6 +25,7 @@
     "@sentry/tracing": "^6.19.7",
     "dotenv": "^16.0.0",
     "eleventy": "^1.0.6",
+    "esbuild": "^0.15.7",
     "google-spreadsheet": "^3.2.0",
     "jsdom": "^19.0.0",
     "jsonfile": "^6.1.0",
