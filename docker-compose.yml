@@ -17,7 +17,7 @@ services:
       - $PWD/site:/srv
       - caddy_data:/data
       - caddy_config:/config
-  rdis:
+  redis:
     image: redis:alpine
     expose: 
       - 6379
