@@ -3,11 +3,24 @@ services:
   web:
     build: .
     ports:
-      - 3000:3000
+      - 8000:8000
     env-file: .env
-  redis:
+  caddy:
+    image: caddy/caddy:2.2.1-alpine
+    container_name: caddy-service
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:            
+      - $PWD/Caddyfile:/etc/caddy/Caddyfile
+      - $PWD/site:/srv
+      - caddy_data:/data
+      - caddy_config:/config
+  rdis:
     image: redis:alpine
-    expose: 6379
+    expose: 
+      - 6379
     command: redis-server
     volumes: 
       - redis-data:/data
@@ -21,3 +34,6 @@ services:
 volumes:
   mysql-data:
   redis-data:
+  redis-conf:
+  caddy_data:
+  caddy_config:
