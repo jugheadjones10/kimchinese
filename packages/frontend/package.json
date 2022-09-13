@@ -16,15 +16,14 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@11ty/eleventy": "v2.0.0-canary.8",
     "netlify-cli": "^11.5.0"
   },
   "dependencies": {
+    "@11ty/eleventy": "v2.0.0-canary.8",
     "@logtail/node": "^0.1.12",
     "@sentry/browser": "^6.19.7",
     "@sentry/tracing": "^6.19.7",
     "dotenv": "^16.0.0",
-    "eleventy": "^1.0.6",
     "esbuild": "^0.15.7",
     "google-spreadsheet": "^3.2.0",
     "jsdom": "^19.0.0",

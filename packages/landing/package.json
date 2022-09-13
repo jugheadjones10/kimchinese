@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "build": "npm-run-all -s build:tailwind build:rollup build:eleventy",
+    "build": "run-s build:tailwind build:rollup build:eleventy",
     "build:eleventy": "eleventy",
     "build:rollup": "rollup -c",
     "build:tailwind": "tailwindcss -i input.css -o output.css",
@@ -14,24 +14,19 @@
   },
   "author": "",
   "license": "ISC",
-  "devDependencies": {
+  "dependencies": {
     "@11ty/eleventy": "^2.0.0-canary.8",
+    "@kimchinese/shared": "*",
     "@rollup/plugin-commonjs": "^22.0.2",
     "@rollup/plugin-node-resolve": "^14.0.1",
-    "@tailwindcss/typography": "^0.5.2",
-    "rollup": "^2.79.0"
-  },
-  "dependencies": {
-    "@kimchinese/shared": "*",
     "@sentry/browser": "^7.12.1",
     "@sentry/tracing": "^7.12.1",
+    "@tailwindcss/typography": "^0.5.2",
     "dotenv": "^16.0.2",
-    "esbuild": "^0.14.39",
     "luxon": "^3.0.3",
     "node-fetch": "^2.6.7",
     "npm-run-all": "^4.1.5",
-    "serve": "^14.0.1",
-    "tailwindcss": "^3.0.24",
-    "yup": "^0.32.11"
+    "rollup": "^2.79.0",
+    "tailwindcss": "^3.0.24"
   }
 }
