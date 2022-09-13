@@ -1,4 +1,3 @@
-const esbuild = require("esbuild")
 require("dotenv").config()
 module.exports = function (eleventyConfig) {
   eleventyConfig.addPassthroughCopy("output.css")
