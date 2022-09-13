@@ -12,7 +12,7 @@
     "dev:express": "nodemon 'src/index.js'",
     "build": "run-p build:*",
     "build:babel": "babel --out-file tests/crawlee-dataset.cjs tests/crawlee-dataset.mjs --out-file src/users/crawl-words.cjs src/users/crawl-words.mjs",
-    "build:prisma": "prisma generate",
+    "build:prisma": "prisma generate && prisma migrate deploy",
     "postinstall": "patch-package"
   },
   "imports": {
