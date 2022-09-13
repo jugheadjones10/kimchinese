@@ -5,6 +5,7 @@ ENV NODE_ENV=production
 
 WORKDIR /app
 COPY ["package.json", "package-lock.json*", "./"]
+EXPOSE 3000
 
 COPY ["packages/backend", "./packages/backend"]
 COPY ["packages/shared", "./packages/shared"]
