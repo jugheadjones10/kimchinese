@@ -1,9 +1,5 @@
 var shared = {};
 
-shared.hey = function hey() {
-  console.log("G");
-};
-
 shared.validationStrings = {
   missingFile: "You need to upload a file",
   invalidFileType: "File type needs to be csv, xls, or xlsx",

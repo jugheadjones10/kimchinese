@@ -5,6 +5,7 @@
   "main": "src/index.js",
   "type": "commonjs",
   "scripts": {
+    "debug": "node play.js",
     "test": "env-cmd -f .env.test jest $npm_config_file --detectOpenHandles",
     "start": "node src/index.js",
     "dev": "run-p dev:*",
@@ -30,7 +31,6 @@
   "license": "ISC",
   "dependencies": {
     "@bull-board/express": "^3.10.4",
-    "@kimchinese/shared": "*",
     "@logtail/node": "^0.1.12",
     "@logtail/winston": "^0.1.13",
     "@prisma/client": "^4.2.1",

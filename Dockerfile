@@ -1,15 +1,24 @@
 # syntax=docker/dockerfile:1
 
-FROM node:16.16.0
-ENV NODE_ENV=production
+FROM node:18.9.0
+FROM mcr.microsoft.com/playwright:focal
+# ENV NODE_ENV=production
+
+EXPOSE 3000
 
 WORKDIR /app
 COPY ["package.json", "package-lock.json*", "./"]
-EXPOSE 3000
+COPY ["packages/backend/package.json", "./packages/backend/"]
+COPY ["packages/shared/package.json", "./packages/shared/"]
+# COPY [".env", "./packages/backend"]
 
-COPY ["packages/backend", "./packages/backend"]
-COPY ["packages/shared", "./packages/shared"]
-RUN npm install --production
-RUN npm run build -w packages/backend 
+# RUN npm install --production
+RUN npm install
 
-CMD [ "npm", "start", "-w", "packages/backend" ]
+COPY . .
+# COPY ["packages/backend/.env", "./.env"]
+COPY ["packages/backend/.env", "./.env"]
+
+RUN npm run build -w packages/backend
+
+CMD [ "npm", "run", "debug", "-w", "packages/backend" ]

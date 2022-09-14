@@ -1,5 +1,6 @@
 const Joi = require("joi")
-const { validationStrings } = require("@kimchinese/shared")
+// const { validationStrings } = require("@kimchinese/shared")
+const { validationStrings } = require("../shared.js")
 
 module.exports = Joi.object({
   username: Joi.string().alphanum().required().messages({
@@ -18,7 +19,7 @@ module.exports = Joi.object({
       "array.includes": validationStrings.invalidStarterPackValues,
       "any.required": validationStrings.missingStarter,
     }),
-  file: Joi.object({
+ file: Joi.object({
     mimetype: Joi.string()
       .valid(
         "application/vnd.ms-excel",
