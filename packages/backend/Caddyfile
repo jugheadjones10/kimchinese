@@ -1,0 +1,5 @@
+server.kimchinese.com {
+  reverse_proxy web:8000  {
+    header_down Strict-Transport-Security max-age=31536000;
+   }
+}
