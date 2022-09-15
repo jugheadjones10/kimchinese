@@ -12,6 +12,7 @@ export const examplesPage = "example"
 
 const playwrightTimeout = 2000
 export default async function crawlWords(words) {
+  const scrapeResults = []
   // This doesn't seem to work
   // await purgeDefaultStorages()
   const requestObjects = []
@@ -77,12 +78,16 @@ export default async function crawlWords(words) {
             pronounceUrl,
           }
           log.info(util.inspect(results))
-          await Dataset.pushData(results)
+          // await Dataset.pushData(results)
+          scrapeResults.push(results)
         } catch (e) {
           log.warning(
             "Could not find page elements for word: " + request.userData.word
           )
-          await Dataset.pushData({
+          // await Dataset.pushData({
+          //   word: request.userData.word,
+          // })
+          scrapeResults.push({
             word: request.userData.word,
           })
         }
@@ -101,12 +106,16 @@ export default async function crawlWords(words) {
             examples,
           }
           log.info(util.inspect(results))
-          await Dataset.pushData(results)
+          // await Dataset.pushData(results)
+          scrapeResults.push(results)
         } catch (e) {
           log.warning(
             "Could not find examples for word: " + request.userData.word
           )
-          await Dataset.pushData({
+          // await Dataset.pushData({
+          //   word: request.userData.word,
+          // })
+          scrapeResults.push({
             word: request.userData.word,
           })
         }
@@ -127,4 +136,5 @@ export default async function crawlWords(words) {
   await crawler.run()
 
   console.log("Crawler finished.")
+  return scrapeResults
 }

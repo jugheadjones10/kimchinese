@@ -37,11 +37,18 @@ async function scrapeAndReduceWords(words) {
 
   // Need to make sure the storage directory has been initialized before trying to open it with Dataset. If not Dataset throws an
   // error.
-  const dataset = await Dataset.open()
-  await dataset.drop()
-  await crawlWords(words)
 
-  return reduceScrapedWords()
+  // try {
+  //   const dataset = await Dataset.open()
+  //   await dataset.drop()
+  //   console.log("DATASET HAS BEEN DROPPED")
+  // } catch (e) {
+  //   console.log(e)
+  //   console.log("DATASET HASN'T BEEN DROPPED")
+  // }
+  const results = await crawlWords(words)
+
+  return reduceScrapedWords(results)
     .then((scrapedWords) => {
       // Need to drop the dataset here because otherwise dataset.reduce will return ALL words that have been scraped before
       // even though we only want the ones that have been newly scraped.
@@ -73,9 +80,9 @@ async function scrapeAndReduceWords(words) {
     })
 }
 
-async function reduceScrapedWords() {
-  const dataset = await Dataset.open()
-  const wordResults = dataset.reduce((memo, value) => {
+async function reduceScrapedWords(results) {
+  console.log("THE RESULTS!!", results)
+  const wordResults = results.reduce((memo, value) => {
     memo[value.word] = {
       ...memo[value.word],
       ...value,
@@ -89,6 +96,22 @@ async function reduceScrapedWords() {
 
     return memo
   }, {})
+
+  // const dataset = await Dataset.open()
+  // const wordResults = dataset.reduce((memo, value) => {
+  //   memo[value.word] = {
+  //     ...memo[value.word],
+  //     ...value,
+  //   }
+  //   if (!memo[value.word].englishDefinitions) {
+  //     const cedictWord = cedictWords[value.word]
+  //     memo[value.word].englishDefinitions = cedictWord?.definitions || [
+  //       "English definition unavailable",
+  //     ]
+  //   }
+
+  //   return memo
+  // }, {})
 
   return wordResults
 }

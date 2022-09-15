@@ -1,5 +1,4 @@
 # syntax=docker/dockerfile:1
-
 FROM node:18.9.0
 FROM mcr.microsoft.com/playwright:focal
 
@@ -12,9 +11,12 @@ COPY ["package.json", "package-lock.json*", "./"]
 # RUN npm install --production
 RUN npm install
 
-COPY . .
-# COPY ["packages/backend/.env", "./.env"]
-# COPY ["packages/backend/.env", "./.env"]
+# ENV DATABASE_URL=mysql://root:1234@mysql:3306/kimchinese
 
-# RUN npm run build -w packages/backend
-CMD ["npm", "run", "debug"]
+COPY . .
+# the env_file directive doesn't work in docker-compose. Not sure it would have worked anyway, since I configure
+# my runtime envrionment with dotenv, which reads from a .env file and not the shell environment.
+COPY [".docker.env", ".env"]
+
+RUN npm run build
+CMD ["npm", "start"]
