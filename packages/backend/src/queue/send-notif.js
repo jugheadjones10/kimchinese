@@ -4,8 +4,9 @@ const courier = CourierClient({
   authorizationToken: process.env.COURIER_AUTH_TOKEN,
 })
 
+const link = "http://app.kimchinese.com/?username="
+
 exports.sendEmail = function sendEmail({ email, username, scheduledDate }) {
-  const link = "dummyLink"
   return courier
     .send({
       message: {
@@ -16,7 +17,7 @@ exports.sendEmail = function sendEmail({ email, username, scheduledDate }) {
           title: "Here's your KimChinese link!",
           body: `Dear ${username},
         Here's your flashcard review link for today. Have fun!
-        ${link}`,
+        ${link + username}`,
         },
         routing: {
           method: "single",
@@ -30,7 +31,6 @@ exports.sendEmail = function sendEmail({ email, username, scheduledDate }) {
 }
 
 exports.sendSMS = function sendSMS({ sms, username, scheduledDate }) {
-  const link = "dummyLink"
   return courier
     .send({
       message: {
@@ -41,7 +41,7 @@ exports.sendSMS = function sendSMS({ sms, username, scheduledDate }) {
           title: "Here's your KimChinese link!",
           body: `Dear ${username},
         Here's your flashcard review link for today. Have fun!
-        ${link}`,
+        ${link + username}`,
         },
         routing: {
           method: "single",
