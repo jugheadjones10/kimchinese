@@ -18,7 +18,7 @@
     "@11ty/eleventy": "^2.0.0-canary.8",
     "@kimchinese/shared": "*",
     "@rollup/plugin-commonjs": "^22.0.2",
-    "@rollup/plugin-node-resolve": "^14.0.1",
+   "@rollup/plugin-node-resolve": "^14.0.1",
     "@sentry/browser": "^7.12.1",
     "@sentry/tracing": "^7.12.1",
     "@tailwindcss/typography": "^0.5.2",

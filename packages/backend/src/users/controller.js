@@ -16,7 +16,7 @@ exports.getUser = getUser
 
 async function getUser(req, res, next) {
   const username = req.params.username
-  logger.info(`Request for ${username}`)
+  // logger.info(`Request for ${username}`)
   let result = null
   if (username) {
     result = await prisma.user.findUnique({

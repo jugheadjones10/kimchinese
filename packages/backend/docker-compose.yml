@@ -4,21 +4,20 @@ services:
     build: .
     ports:
       - 8000:8000
-    # env_file: .docker.env
     depends_on:
       - redis
       - mysql
-  # caddy:
-  #   image: caddy/caddy:2.2.1-alpine
-  #   restart: unless-stopped
-  #   ports:
-  #     - "80:80"
-  #     - "443:443"
-  #   volumes:            
-  #     - $PWD/Caddyfile:/etc/caddy/Caddyfile
-  #     - $PWD/site:/srv
-  #     - caddy_data:/data
-  #     - caddy_config:/config
+  caddy:
+    image: caddy/caddy:2.2.1-alpine
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:            
+      - $PWD/Caddyfile:/etc/caddy/Caddyfile
+      - $PWD/site:/srv
+      - caddy_data:/data
+      - caddy_config:/config
   redis:
     image: redis:alpine
     expose: 
@@ -38,5 +37,5 @@ volumes:
   mysql-data:
   redis-data:
   redis-conf:
-  # caddy_data:
-  # caddy_config:
+  caddy_data:
+  caddy_config:

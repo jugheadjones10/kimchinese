@@ -32,8 +32,9 @@ exports.examplesPage = examplesPage;
 const playwrightTimeout = 2000;
 
 async function crawlWords(words) {
-  // This doesn't seem to work
+  const scrapeResults = []; // This doesn't seem to work
   // await purgeDefaultStorages()
+
   const requestObjects = [];
 
   for (let i = 0; i < words.length; i++) {
@@ -99,11 +100,15 @@ async function crawlWords(words) {
             pinyin,
             pronounceUrl
           };
-          log.info(_util.default.inspect(results));
-          await _crawlee.Dataset.pushData(results);
+          log.info(_util.default.inspect(results)); // await Dataset.pushData(results)
+
+          scrapeResults.push(results);
         } catch (e) {
-          log.warning("Could not find page elements for word: " + request.userData.word);
-          await _crawlee.Dataset.pushData({
+          log.warning("Could not find page elements for word: " + request.userData.word); // await Dataset.pushData({
+          //   word: request.userData.word,
+          // })
+
+          scrapeResults.push({
             word: request.userData.word
           });
         }
@@ -120,11 +125,15 @@ async function crawlWords(words) {
             word: request.userData.word,
             examples
           };
-          log.info(_util.default.inspect(results));
-          await _crawlee.Dataset.pushData(results);
+          log.info(_util.default.inspect(results)); // await Dataset.pushData(results)
+
+          scrapeResults.push(results);
         } catch (e) {
-          log.warning("Could not find examples for word: " + request.userData.word);
-          await _crawlee.Dataset.pushData({
+          log.warning("Could not find examples for word: " + request.userData.word); // await Dataset.pushData({
+          //   word: request.userData.word,
+          // })
+
+          scrapeResults.push({
             word: request.userData.word
           });
         }
@@ -146,4 +155,5 @@ async function crawlWords(words) {
 
   await crawler.run();
   console.log("Crawler finished.");
+  return scrapeResults;
 }
